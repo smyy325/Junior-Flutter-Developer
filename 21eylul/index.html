@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ben Kimim?</title>
+  </head>
+  <body>
+    <!-- Başlık ve Menü Bölümü-->
+    <header>
+      <h1>Portfolyom</h1>
+      <nav aria-label="Ana Menü">
+        <a href="#hakkimda">Hakkımda</a> ||
+        <a href="#egitimlerim">Eğitimlerim</a> ||
+        <a href="#projelerim">Projelerim</a> ||
+        <a href="#iletisim">İletişim Bilgilerim</a>
+      </nav>
+    </header>
+
+    <main>
+        <!-- 1.Bölüm Hakkımda -->
+      <article id="hakkimda">
+        <h2>Merhaba! Benim adım Sümeyye :)</h2>
+        <img
+          src="https://avatars.githubusercontent.com/u/135053124?s=400&u=e0c7f7a49c01f8ab9ebcb42260e23efb75028e01&v=4"
+          alt="Kişisel Fotoğrafım"
+          width="400"
+          height="400"
+        />
+        <p>
+          Ben Sümeyye. 23 yaşında bir <strong>Yazılım Mühendisiyim</strong>.
+          Şuan kendimi <mark>Flutter Developer</mark> olarak geliştiriyorum.
+          Ekip çalışmasına son derece uyumluyum, GitGub'taki repolarımı
+          incelerseniz ekip arkadaşlarımın da ismi yazıyor açıklama
+          kısımlarında. Şimdilik benden bu kadar aşağı inerek daha detaylı bilgi
+          alabilirsiniz.
+        </p>
+        <!-- iframe: bir web sayfasının içine başka bir web sayfasının penceresini oluşturmak. -->
+        <h3>Kişisel Sitem</h3>
+        <iframe
+          src="https://somayaarab.com/#home"
+          width="100%"
+          height="600"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+        <!-- ekrana video penceresi ekleme bölümü-->
+        <h3 style="margin-bottom: 16px">W3Schools</h3>
+        <p>
+          HTML5 ile ilgili eğlenceli ve kısa bilgilendirici içeriklerin olduğu
+          kaynak.
+        </p>
+        <div
+          id="videoBox"
+          style="
+            font-family: sans-serif;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+          "
+        >
+          <video
+            id="myVideo"
+            playsinline
+            webkit-playsinline
+            preload="metadata"
+            style="width: 100%; display: block"
+          >
+            <source
+              src="https://www.w3schools.com/html/mov_bbb.mp4"
+              type="video/mp4"
+            />
+            Tarayıcınız HTML5 video etiketlerini desteklemiyor.
+          </video>
+          <div
+            style="
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+              padding: 12px;
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            "
+          >
+          <!-- Süre göstergesi ve ilerleme çubuğu-->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 12px;
+                color: white;
+              "
+            >
+              <span id="currentTime">00:00</span>
+              <input
+                type="range"
+                id="progressBar"
+                min="0"
+                max="100"
+                value="0"
+                style="flex: 1; cursor: pointer"
+              />
+              <span id="durationTime">00:00</span>
+            </div>
+            <!-- Oynatma, Ses, Hız, PiP ve Tam Ekran Butonları -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 12px">
+                <button
+                  id="btnPlay"
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  Oynat
+                </button>
+                <button
+                  id="btnMute"
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  Sesli
+                </button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <button
+                  id="btnSpeed"
+                  style="
+                    background: #0284c7;
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  1.0x
+                </button>
+                <button
+                  id="btnPip"
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  Pip
+                </button>
+                <button
+                  id="btnFull"
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  Tam Ekran
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Her şeyi yöneten javascript kodları.-->
+        <script>
+          const video = document.getElementById("myVideo");
+          const btnPlay = document.getElementById("btnPlay");
+          const btnMute = document.getElementById("btnMute");
+          const btnSpeed = document.getElementById("btnSpeed");
+          const btnPip = document.getElementById("btnPip");
+          const btnFull = document.getElementById("btnFull");
+          const progressBar = document.getElementById("progressBar");
+          const currentTimeEL = document.getElementById("currentTime");
+          const durationTimeEL = document.getElementById("durationTime");
+
+          btnPlay.addEventListener("click", () => {
+            if (video.paused) {
+              video.play();
+              btnPlay.innerText = "Duraklat";
+            } else {
+              video.pause();
+              btnPlay.innerText = "Oynat";
+            }
+          });
+
+          function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+          }
+
+          video.addEventListener("loadedmetadata", () => {
+            durationTimeEL.innerText = formatTime(video.duration);
+          });
+
+          video.addEventListener("timeupdate", () => {
+            currentTimeEL.innerText = formatTime(video.currentTime);
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.value = isNaN(progress) ? 0 : progress;
+          });
+
+          progressBar.addEventListener("input", (e) => {
+            const seekTime = (e.target.value / 100) * video.duration;
+            video.currentTime = seekTime;
+          });
+
+          btnMute.addEventListener("click", () => {
+            video.muted = !video.muted;
+            btnMute.innerText = video.muted ? "Sessiz" : "Sesli";
+          });
+
+          const speeds = [1.0, 1.25, 1.5, 2.0];
+          let speedIndex = 0;
+          btnSpeed.addEventListener("click", () => {
+            speedIndex = (speedIndex + 1) % speeds.length;
+            video.playbackRate = speeds[speedIndex];
+            btnSpeed.innerText = `${speeds[speedIndex]}x`;
+          });
+
+          btnPip.addEventListener("click", async () => {
+            try {
+              if (document.pictureInPictureElement) {
+                await document.exitPictureInPicture();
+              } else {
+                await video.requestPictureInPicture();
+              }
+            } catch (err) {
+              console.warn("Pip desteklemiyor veya izin verilmedi", err);
+            }
+          });
+
+          btnFull.addEventListener("click", () => {
+            const container = document.getElementById("videoBox");
+            if (!document.fullscreenElement) {
+              container.requestFullscreen().catch((err) => alert(err.message));
+            } else {
+              document.exitFullscreen();
+            }
+          });
+        </script>
+      </article>
+      <br><hr><br>
+      <!--2.Bölüm Eğitimlerim-->
+      <section id="egitimlerim">
+        <h2>Eğitimlerim</h2>
+        <table border="1" width="100%">
+          <thead>
+            <tr>
+              <td style="font-weight: bold; font-size: 20px; color: darkblue">
+                Eğitim Alınan Yerin Adı
+              </td>
+              <td style="font-weight: bold; font-size: 20px; color: darkblue">
+                Eğitim seviyesi
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Manisa Celal Bayar Üniveristesi</td>
+              <td>Lisans</td>
+            </tr>
+            <tr>
+              <td>Arif Çeler Kız Anadolu İmam Hatip Lisesi</td>
+              <td>Lise</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <br><hr><br>
+      <!--3.Bölüm Projelerim-->
+      <section id="projelerim">
+        <h2>Projelerim</h2>
+        <!--Proje 1 canva bölümü-->
+        <canvas
+          id="proje"
+          width="320"
+          height="140"
+          style="border: 2px dashed #94a3b8; border-radius: 8px"
+        ></canvas>
+        <script>
+          // Tuval ve fırçamızı alalım
+          const tuval = document.getElementById("proje");
+          const firca = tuval.getContext("2d");
+
+          // 1. Mavi bir dikdörtgen boya
+          firca.fillStyle = "#FFC0CB";
+          firca.fillRect(30, 25, 260, 90);
+
+          // 2. Üzerine beyaz yazı yazalım
+          firca.fillStyle = "#ffffff";
+          firca.font = "bold 20px sans-serif";
+          firca.fillText("MemoMate!", 45, 75);
+        </script>
+        <p>
+          <ins>MemoMate</ins>, notları ve görevleri verimli bir şekilde
+          düzenlemek için kullanıcı dostu bir not defteri uygulamasıdır. Not
+          alma, görev yönetimi, yapay zeka destekli sohbet ve sesli metne
+          dönüştürme özelliklerini tek bir üretkenlik aracında birleştirerek
+          kullanıcıların kişisel ve profesyonel verimliliklerini artırmalarına
+          yardımcı olur.
+        </p>
+        <br />
+        <canvas
+          id="proje1"
+          width="320"
+          height="140"
+          style="border: 2px dashed #94a3b8; border-radius: 8px"
+        ></canvas>
+        <script>
+          const tuval1 = document.getElementById("proje1");
+          const firca1 = tuval1.getContext("2d");
+          firca1.fillStyle = "#0000FF";
+          firca1.fillRect(30, 25, 260, 90);
+          firca1.fillStyle = "#ffffff";
+          firca1.font = "bold 20px sans-serif";
+          firca1.fillText("PillMate!", 45, 75);
+        </script>
+        <p>
+          <ins>PillMate</ins>, kullanıcıların ilaçlarını takip etmelerine ve
+          yönetmelerine yardımcı olan bir mobil uygulamadır. PillMate ile
+          ilaçlarınızı zamanında almanız için hatırlatıcılar ayarlayabilir, ilaç
+          stoğunuzu takip edebilir ve Gemini yapay zeka desteği sayesinde her
+          ilaç hakkında ayrıntılı bilgilere hızlıca erişebilirsiniz.
+        </p>
+      </section>
+      <br><hr><br>
+      <!--4.Bölüm İletişim-->
+      <section id="iletisim">
+        <h2>İletişim Bilgilerim</h2>
+        <p>
+          Benimle iletişime geçmek, projelerim hakkında soru sormak için iletişime geçebilirsiniz.
+        </p>
+        
+        <ul style="list-style-type: square; line-height: 1.8;">
+          <li>
+            <strong>E-posta:</strong> 
+            <a href="mailto:sumeyye@ornek.com">sumeyye@ornek.com</a>
+          </li>
+          <li>
+            <strong>GitHub:</strong> 
+            <a href="https://github.com/smyy325" target="_blank">GitHub Profilim</a>
+          </li>
+          <li>
+            <strong>LinkedIn:</strong> 
+            <a href="https://www.linkedin.com/in/somaya-a-995a32290/" target="_blank">LinkedIn Hesabım</a>
+          </li>
+          <li>
+            <strong>Konum:</strong> Manisa, Türkiye
+          </li>
+        </ul>
+      </section>
+      <!--5.Bölüm Alt Bilgi(Footer)-->
+      <footer>
+        <p>© 2026 Sümeyye. Tüm Hakları Saklıdır.</p>
+      </footer>
+    </main>
+  </body>
+</html>

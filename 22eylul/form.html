@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>İş Başvuru Formu</title>
+  </head>
+  <body>
+    <h1>SMYY Yazılım - İş Başvuru Formu</h1>
+    <p>Gerekli kısımları doldurarak başvurunuzu tamamlayınız.</p>
+
+    <!--
+    form: Kullanıcıdan bilgi almak ve bu bilgileri sunucuya göndermek için kullanılyor.
+    action: Form gönderildiğinde verilerin gönderileceği adresi gösteriyor.
+    POST: Verileri HTTP isteğinin gövdesinde sunucuya gönderen yöntemdir.
+    enctype: Form verilerinin sunucuya hangi formatta kodlanarak gönderileceğini belirtir.
+    -->
+    <form action="formu-kaydet" method="POST" enctype="multipart/form-data">
+      <!-- 1. Bmlüm KİŞİSEL BİLGİLER -->
+      <!--
+        fieldset: Formdaki ilgili alanları bir grup halinde toplar. Tarayıcı genellikle bu grubun etrafına bir çerçeve çiziyor.
+        legend: fieldset grubunun başlığını belirtir.
+        input: Kullanıcıdan veri almak için kullanılan form elemanıdır.
+        autofocus: Sayfa açıldığında imlecin otomatik olarak bu alana gelmesini sağlar.
+
+        -->
+      <fieldset>
+        <legend>Kişisel Bilgiler</legend>
+
+        <label for="fullName">Adınız ve Soyadınız <sup>*</sup>:</label><br>
+        <input
+          type="text"
+          id="fullName"
+          name="fullname"
+          placeholder="Sümeyye Arabn"
+          required
+          autofocus
+        ><br>
+        <br>
+
+        <label for="birthDay">Doğum Tarihiniz <sup>*</sup>:</label><br>
+        <input
+          type="date"
+          id="birthDay"
+          name="birthdate"
+          required
+        ><br>
+        <br>
+
+        <p>Cinsiyetiniz <sup>*</sup>:</p>
+        <input
+          type="radio"
+          id="cinsiyetK"
+          name="cinsiyet"
+          value="Kadin"
+          required
+        >
+        <label for="cinsiyetK">Kadın</label>
+
+        <input
+          type="radio"
+          id="cinsiyetE"
+          name="cinsiyet"
+          value="Erkek"
+          required
+        >
+        <label for="cinsiyetE">Erkek</label>
+
+        <input
+          type="radio"
+          id="cinsiyetB"
+          name="cinsiyet"
+          value="Belirtmek_istemiyorum"
+          required
+        >
+        <label for="cinsiyetB">Belirtmek İstemiyorum</label><br>
+      </fieldset>
+      <br>
+
+      <!-- 2. Bölüm İLETİŞİM VE ADRES -->
+      <fieldset>
+        <legend>İletişim Bilgileri</legend>
+
+        <label for="emailAdres">E-posta Adresiniz <sup>*</sup>:</label><br>
+        <input
+          type="email"
+          id="emailAdres"
+          name="email"
+          placeholder="sumeyye@mail.com"
+          required
+        ><br>
+        <br>
+
+        <label for="telefon">Telefon Numaranız:</label><br>
+        <input
+          type="tel"
+          id="telefon"
+          name="phone"
+          placeholder="+90 555 555 5555"
+        ><br>
+        <br>
+
+        <label for="kisiselSite">Portfolyo / GitHub Linkiniz:</label><br>
+        <input
+          type="url"
+          id="kisiselSite"
+          name="website"
+          placeholder="https://github.com/..."
+        ><br>
+        <br>
+
+        <label for="ikamet_il">İkamet Ettiğiniz İl <sup>*</sup>:</label><br>
+        <select id="ikamet_il" name="city" required>
+          <option value="" selected disabled>Seçiniz...</option>
+          <option value="istanbul">İstanbul</option>
+          <option value="ankara">Ankara</option>
+          <option value="izmir">İzmir</option>
+          <option value="manisa">Manisa</option>
+          <option value="kutahya">Kütahya</option></select
+        ><br>
+        <br>
+
+        <label for="adres">Açık Adresiniz:</label><br>
+        <textarea
+          id="adres"
+          name="address"
+          rows="4"
+          cols="50"
+          placeholder="Sokak, Mahalle, İlçe..."
+          required
+        ></textarea
+        ><br>
+        <br>
+      </fieldset>
+      <br>
+
+      <!-- 3.Bölüm TEKNİK BİLGİLER -->
+      <fieldset>
+        <legend>Teknik Bilgiler</legend>
+
+        <label for="pozisyon">Başvurduğunuz Pozisyon <sup>*</sup>:</label
+        ><br>
+        <input type="text" id="pozisyon" name="jobTitle" list="pozisyonlar" required>
+        <datalist id="pozisyonlar">
+          <option value="" selected disabled>Seçiniz...</option>
+          <option value="Front-End Developer"></option>
+          <option value="Back-End Developer"></option>
+          <option value="Mobile Developer"></option></datalist
+        ><br>
+
+        <p>Bildiğiniz Teknolojiler <sup>*</sup>:</p>
+        <input type="checkbox" id="html_css" name="skills[]" value="HTML/CSS" required>
+        <label for="html_css">HTML5 & CSS3</label><br>
+
+        <input
+          type="checkbox"
+          id="javascript"
+          name="skills[]"
+          value="JavaScript"
+        >
+        <label for="javascript">JavaScript</label><br>
+
+        <input
+          type="checkbox"
+          id="dart_flutter"
+          name="skills[]"
+          value="Dart/Flutter"
+        >
+        <label for="dart_flutter">Dart & Flutter</label><br><br>
+
+        <label for="cv_dosya">Özgeçmişiniz (CV) <sup>*</sup> (Sadece PDF):</label><br>
+        <input
+          type="file"
+          id="cv_dosya"
+          name="resume"
+          accept=".pdf"
+          required
+        ><br><br>
+      </fieldset>
+      <br>
+
+      <!-- 4. Bölüm KVKK -->
+      <fieldset>
+        <legend>KVKK Onay</legend>
+        <input
+          type="hidden"
+          id="basvuru_kodu"
+          name="application_code"
+          value="ACME_2026_HR_001"
+        />
+
+        <input type="checkbox" id="kvkk_onay" name="kvkk_consent" required>
+        <label for="kvkk_onay"
+          >KVKK metnini okudum ve verilerimin işlenmesini onaylıyorum.
+          <sup>*</sup></label
+        ><br><br>
+      </fieldset>
+      <br>
+      <button type="submit">Başvuruyu Tamamla ve Gönder</button>
+      <button type="reset">Formu Temizle</button>
+    </form>
+  </body>
+</html>

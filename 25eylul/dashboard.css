@@ -1,0 +1,334 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --bg-color: #faf5f5;
+  --sidebar-bg: #e6dcf5;
+  --card-bg: #ffffff;
+  --text-dark: #3a3a3a;
+  --text-muted: #8e8e8e;
+  --purple-accent: #a385e0;
+  --pink-accent: #ffebf0;
+  --green-accent: #e5f5eb;
+  --yellow-accent: #fff7e6;
+  --shadow-soft: 0 12px 24px rgba(0, 0, 0, 0.04);
+  --radius-lg: 30px;
+  --radius-md: 20px;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  gap: 30px;
+  background-color: var(--bg-color);
+}
+
+.sidebar {
+  background-color: var(--sidebar-bg);
+  width: 260px;
+  border-radius: var(--radius-lg);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-soft);
+}
+
+.profile-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profile-pic {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 16px rgba(163, 133, 224, 0.2);
+}
+
+.profile-section h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 15px;
+  color: #5a4b73;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active, .nav-item:hover {
+  background-color: var(--purple-accent);
+  color: white;
+  box-shadow: 0 8px 15px rgba(163, 133, 224, 0.3);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-titles h1 {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.header-titles p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.icon-purple { background-color: #f0e6ff; color: #a385e0; }
+.icon-pink { background-color: #ffebf0; color: #ff7597; }
+.icon-green { background-color: #e5f5eb; color: #5bc281; }
+.icon-yellow { background-color: #fff7e6; color: #ffb833; }
+
+.stat-info h4 {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.stat-info h2 {
+  font-size: 22px;
+  margin-bottom: 3px;
+}
+
+.stat-info p {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.trend-up { color: #5bc281 !important; }
+
+.widgets-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+}
+
+.widget-box {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 25px;
+  box-shadow: var(--shadow-soft);
+}
+
+.widget-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activity-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.bg-green { background-color: #e5f5eb; }
+.bg-yellow { background-color: #fff7e6; }
+.bg-pink { background-color: #ffebf0; }
+.bg-blue { background-color: #e6f2ff; }
+
+.activity-left p {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.right-widgets {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.calendar-box {
+  background-color: #f4f6ff;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.day-name {
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.day-number {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.day-active {
+  background-color: #8c9eff;
+  color: white;
+  box-shadow: 0 4px 10px rgba(140, 158, 255, 0.4);
+}
+
+.motivation-card {
+  background-color: #f2ebff;
+  border-radius: var(--radius-lg);
+  padding: 25px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.motivation-card h3 {
+  color: #5a4b73;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.motivation-card p {
+  color: #7b6d91;
+  font-size: 14px;
+  line-height: 1.5;
+  font-style: italic;
+  width: 80%;
+}
+
+.motivation-emoji {
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+  font-size: 55px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+  }
+  .profile-section { margin-bottom: 0; display: flex; align-items: center; gap: 15px;}
+  .profile-pic { width: 50px; height: 50px; margin-bottom: 0;}
+  .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 5px;}
+  .nav-item { padding: 8px 12px; }
+  
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .widgets-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .header { flex-direction: column; align-items: flex-start; gap: 15px;}
+}

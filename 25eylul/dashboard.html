@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kişisel Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Menü -->
+    <aside class="sidebar">
+      <div class="profile-section">
+        <img src="https://avatars.githubusercontent.com/u/135053124?v=4" alt="Profil" class="profile-pic">
+        <h3>Merhaba, Sümeyye!</h3>
+      </div>
+      
+      <ul class="nav-menu">
+        <a href="#" class="nav-item active">📋 Dashboard</a>
+        <a href="#" class="nav-item">🎯 Yapılacaklar</a>
+        <a href="#" class="nav-item">📅 Takvim</a>
+        <a href="#" class="nav-item">✏️ Günün Sözü</a>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <!-- ÜST BİLGİ -->
+      <header class="header">
+        <div class="header-titles">
+          <h1>Hoş geldin, 🤩</h1>
+          <p>İşte bugünün gelişmeleri.</p>
+        </div>
+      </header>
+
+      <!-- KARTLAR -->
+      <section class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon icon-purple">✅</div>
+          <div class="stat-info">
+            <h4>Biten Görevler</h4>
+            <h2>23</h2>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon icon-pink">📅</div>
+          <div class="stat-info">
+            <h4>Devam Eden</h4>
+            <h2>20+</h2>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-green">⛳</div>
+          <div class="stat-info">
+            <h4>Tamamlanan Ders Günü</h4>
+            <h2>14</h2>
+            <p class="trend-up">Bu ay</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-yellow">⭐</div>
+          <div class="stat-info">
+            <h4>Odaklanma</h4>
+            <h2>14s</h2>
+            <p style="color: #ffb833">+2s dünden</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="widgets-row">
+        <div class="widget-box">
+          <h3 class="widget-title">Yapılacaklar</h3>
+          <div class="activity-list">
+            
+            <div class="activity-item">
+              <div class="activity-left">
+                <div class="activity-icon bg-green">✔️</div>
+                <p>"+ mini Ödev" Tamamlandı</p>
+              </div>
+              <span class="activity-time">2s önce</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-left">
+                <div class="activity-icon bg-yellow">📁</div>
+                <p>"Hafta Sonu Ödevleri" Planlandı</p>
+              </div>
+              <span class="activity-time">5s önce</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-left">
+                <div class="activity-icon bg-pink">💬</div>
+                <p>Mesajları Kontrol Et</p>
+              </div>
+              <span class="activity-time">1sn önce</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-left">
+                <div class="activity-icon bg-blue">☁️</div>
+                <p>"Gün İçindeki Örnekler" GitHub'a Yüklendi</p>
+              </div>
+              <span class="activity-time">1g önce</span>
+            </div>
+
+          </div>
+        </div>
+        
+        <div class="right-widgets">
+          
+          <!-- TAKVİM -->
+          <div class="widget-box calendar-box">
+            <div class="calendar-header">
+              <h3 style="font-size: 16px; color: #5a4b73;">Takvim</h3>
+              <span style="font-size: 13px; color: #8c9eff; cursor: pointer;">Tümünü Gör</span>
+            </div>
+            
+            <div class="calendar-grid">
+              <div class="day-name">Pz</div>
+              <div class="day-name">Pt</div>
+              <div class="day-name">Sa</div>
+              <div class="day-name">Ça</div>
+              <div class="day-name">Pe</div>
+              <div class="day-name">Cu</div>
+              <div class="day-name">Ct</div>
+              
+              <div class="day-number">13</div>
+              <div class="day-number">14</div>
+              <div class="day-number day-active">15</div>
+              <div class="day-number">16</div>
+              <div class="day-number">17</div>
+              <div class="day-number">18</div>
+              <div class="day-number">19</div>
+            </div>
+          </div>
+
+          <!-- MOTİVASYON -->
+          <div class="motivation-card">
+            <h3>Harika Gidiyorsun!</h3>
+            <p>"Başlamak için mükemmel olmayı beklemene gerek yok. Ama mükemmel olmak için başlamalısın! ✨"</p>
+            <div class="motivation-emoji">🐰💖</div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>

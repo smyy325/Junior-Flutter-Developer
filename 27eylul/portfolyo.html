@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kişisel Portfolyo</title>
+</head>
+<body>
+
+  <!-- Navigasyon -->
+  <nav class="navbar">
+    <a href="#" class="logo">Portfolyo</a>
+    <ul class="nav-links">
+      <li><a href="#hakkimda">Hakkımda</a></li>
+      <li><a href="#yetenekler">Yetenekler</a></li>
+      <li><a href="#projeler">Projeler</a></li>
+      <li><a href="#iletisim">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hakkımda Bölümü -->
+  <section id="hakkimda">
+    <div class="about-text">
+      <h1>Merhaba, Ben <span>Sümeyye ARAB</span></h1>
+      <p>Merhaba! Ben Somaya Arab. Kısa süre önce Celal Bayar Üniversitesi Yazılım Mühendisliği bölümünden mezun oldum. Teknoloji yolculuğum ön uç geliştirme ile başladı ve son iki yıldır Flutter kullanarak mobil uygulama geliştirme konusunda uzmanlaşıyorum. Yenilikçi ve kullanıcı dostu çözümler geliştirmeye tutkuluyum ve fikirlerin etkili projelere dönüşebileceği işbirlikçi ortamlarda çalışmaktan keyif alıyorum.</p>
+    </div>
+    <img src="https://somayaarab.com/assets/avator-fC2w1m3E.png" alt="Profil Fotoğrafı" class="about-image">
+  </section>
+
+  <!-- Yetenekler Bölümü -->
+  <section id="yetenekler">
+    <h2 class="section-title">Yetenekler</h2>
+    <div class="skills-container">
+      <div class="skill-tag">HTML5</div>
+      <div class="skill-tag">CSS3</div>
+      <div class="skill-tag">JavaScript (ES6+)</div>
+      <div class="skill-tag">Flutter</div>
+      <div class="skill-tag">Git & GitHub</div>
+      <div class="skill-tag">Responsive Tasarım</div>
+      <div class="skill-tag">UI/UX Prensipleri</div>
+    </div>
+  </section>
+
+  <!-- Projeler Bölümü -->
+  <section id="projeler">
+    <h2 class="section-title">Projelerim</h2>
+    <div class="projects-grid">
+      <!-- Proje 1 -->
+      <article class="project-card">
+        <img src="https://somayaarab.com/assets/memomate-PfRNywtJ.png" alt="MemoMate" class="project-image">
+        <div class="project-content">
+          <h3 class="project-title">MemoMate</h3>
+          <p class="project-desc">MemoMate, notları ve görevleri verimli bir şekilde düzenlemek için kullanıcı dostu bir not defteri uygulamasıdır. Not alma, görev yönetimi, yapay zeka destekli sohbet ve sesli metne dönüştürme özelliklerini tek bir üretkenlik aracında birleştirerek kullanıcıların kişisel ve profesyonel verimliliklerini artırmalarına yardımcı olur.</p>
+          <a href="https://github.com/smyy325/MemoMate" class="project-link">Projeyi İncele →</a>
+        </div>
+      </article>
+
+      <!-- Proje 2 -->
+      <article class="project-card">
+        <img src="https://somayaarab.com/assets/pillmate-CX3s0R-L.png" alt="PillMate" class="project-image">
+        <div class="project-content">
+          <h3 class="project-title">PillMate</h3>
+          <p class="project-desc">PillMate, kullanıcıların ilaçlarını takip etmelerine ve yönetmelerine yardımcı olan bir mobil uygulamadır. PillMate ile ilaçlarınızı zamanında almanız için hatırlatıcılar ayarlayabilir, ilaç stoğunuzu takip edebilir ve Gemini yapay zeka desteği sayesinde her ilaç hakkında ayrıntılı bilgilere hızlıca erişebilirsiniz.</p>
+          <a href="https://github.com/smyy325/PillMate" class="project-link">Projeyi İncele →</a>
+        </div>
+      </article>
+
+      <!-- Proje 3 -->
+      <article class="project-card">
+        <img src="https://somayaarab.com/assets/farmly-8v5fsWGa.png" alt="Farmly" class="project-image">
+        <div class="project-content">
+          <h3 class="project-title">Farmly</h3>
+          <p class="project-desc">Farmly, kullanıcıları yerel çiftçilerden doğrudan taze tarım ürünleriyle (süt ve sebze gibi) buluşturmak için tasarlanmış bir mobil uygulamadır. Kullanıcıların kategorilere göz atmasına, ürün aramasına, detayları görüntülemesine, sipariş vermesine ve takip etmesine olanak tanırken, cüzdan ve işlem geçmişi özelliklerini de sunar. Proje ayrıca, kullanıcıları yönetmek, müşteri siparişlerini izlemek, siparişleri teslim edildi olarak işaretlemek ve hesapları silmek için bir Yönetici Paneli de içerir.</p>
+          <a href="https://github.com/smyy325/farmly" class="project-link">Projeyi İncele →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- İletişim Formu Bölümü -->
+  <section id="iletisim">
+    <h2 class="section-title">Benimle İletişime Geçin</h2>
+    <form class="contact-form">
+      <div class="form-group">
+        <label for="name">Adınız Soyadınız</label>
+        <input type="text" id="name" class="form-control" placeholder="Örn: Betül Akçaman" required>
+      </div>
+      <div class="form-group">
+        <label for="email">E-Posta Adresiniz</label>
+        <input type="email" id="email" class="form-control" placeholder="betul@mail.com" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Mesajınız</label>
+        <textarea id="message" class="form-control" placeholder="Merhaba, projemiz için sizinle görüşmek istiyoruz..." required></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Mesaj Gönder</button>
+    </form>
+  </section>
+
+  <!-- Alt Bilgi -->
+  <footer>
+    <p>© 2026 Sümeyye Arab. Tüm Hakları Saklıdır.</p>
+  </footer>
+
+</body>
+</html>

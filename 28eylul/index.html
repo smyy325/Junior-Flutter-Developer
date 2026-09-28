@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!--bu oyunu yapay zeka önerdi hocam ilk gün konularını çalışırken ben ilk başta dersteki yaptığımız gibi bonsole ye yazdırıup bakmayı düşündüm sonra kullanıcıan değer kısmını yapamadım araştırınca promp yöntemini önerdi bana.-->
+    <script>
+      // 1. ADIM: Başlangıç Değerlerini Belirle
+      const hedefSayi = Math.floor(Math.random() * 10) + 1; 
+      let kalanHak = 3;
+      //console.log() tek yönlüdür: Sadece yazılımcının ekrana bilgi basmasını sağlar. Kodu durdurup "Kullanıcı buraya bir rakam yazsın" diyemez.
+      //prompt() çift yönlüdür: Kodu durdurur ve kullanıcının klavyeden bir sayı girmesini bekler. Kullanıcıdan veriyi prompt ile aldığımız için, kazanma/kaybetme durumlarını da aynı etkileşimli pencerede göstermek adına alert kullandık.
+      alert(
+        "Sayı Tahmin Oyunu! 1 ile 10 arasında bir sayı tuttum.",
+      );
+
+      // 2. ADIM: Tekrar eden işlemler için 'while' döngüsü başlat
+      while (kalanHak > 0) {
+        let girdi = prompt(`Tahminini gir (Kalan Hakkın: ${kalanHak}):`);
+
+        if (girdi === null) {
+          alert("Oyundan çıkıldı.");
+          break;
+        }
+
+        let tahmin = Number(girdi);
+
+        if (isNaN(tahmin) || girdi.trim() === "") {
+          alert("Lütfen geçerli bir sayı gir!");
+          continue; 
+        }
+
+        // 3. ADIM: Doğruluk Kontrolü (if / else if / else)
+        if (tahmin === hedefSayi) {
+          alert(`Tebrikler! 🎉 ${hedefSayi} sayısını doğru bildin!`);
+          break; 
+        } else if (tahmin > hedefSayi) {
+          alert("Daha KÜÇÜK bir sayı girmelisin.");
+        } else {
+          alert("Daha BÜYÜK bir sayı girmelisin.");
+        }
+
+        // 4. ADIM: Hakkı Azalt
+        kalanHak--;
+
+        // 5. ADIM: Durumu Değerlendir
+        if (kalanHak === 0) {
+          alert(`Maalesef kaybettin. 😔 Tuttuğum sayı: ${hedefSayi} idi.`);
+        }
+      }
+    </script>
+  </body>
+</html>

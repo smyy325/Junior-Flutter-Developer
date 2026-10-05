@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tatlı Evim</title>
+    <style>
+        *,
+        *::before,
+        *::after{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+      :root {
+        --primary: #9b59b6; --primary-dark: #8e44ad; --primary-light: #f4e6fa;
+        --bg-main: #f8f0fc; --bg-white: #ffffff; --text-main: #333333;
+        --text-muted: #888888; --border-color: #e5ccf5;
+        --success: #28a745; --success-dark: #218838;
+        --danger: #e74c3c; --danger-dark: #c0392b; --badge-populer: #e056fd;
+      }
+      body { font-family: "Segoe UI", sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 20px; margin: 0; }
+      .kiosk-container { max-width: 550px; margin: 0 auto; background: var(--bg-white); padding: 20px; border-radius: 12px; box-shadow: 0 8px 16px rgba(142, 68, 173, 0.15); }
+      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+      .header h1 { margin: 0; color: var(--primary-dark); font-size: 24px; }
+      .cart-icon { font-size: 24px; cursor: pointer; position: relative; background: var(--bg-white); border: 2px solid var(--primary); padding: 8px 15px; border-radius: 8px; user-select: none; transition: 0.2s; color: var(--primary-dark); }
+      .cart-icon:hover { background: var(--primary-light); }
+      .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: var(--bg-white); border-radius: 50%; padding: 2px 8px; font-size: 14px; font-weight: bold; }
+      .search-box { width: 100%; padding: 12px; font-size: 16px; border: 2px solid var(--primary); border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; outline: none; }
+      .search-box:focus { border-color: var(--primary-dark); }
+      .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+      .btn-group button { flex: 1; padding: 10px; border: none; background: var(--primary); color: var(--bg-white); border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
+      .btn-group button:hover { background: var(--primary-dark); }
+      button { border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+      .menu-list { list-style: none; padding: 0; margin: 0; }
+      .menu-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-white); padding: 15px; margin-bottom: 10px; border-radius: 6px; border-left: 5px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .populer-badge { background: var(--badge-populer); color: var(--bg-white); padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px; }
+      .kategori-badge { background: var(--primary-light); color: var(--primary-dark); padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-left: 5px; border: 1px solid var(--border-color); }
+      .add-to-cart-btn { background: var(--success); color: var(--bg-white); margin-left: 15px; padding: 8px 12px; font-size: 14px; flex: none; }
+      .add-to-cart-btn:hover { background: var(--success-dark); }
+      .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(142, 68, 173, 0.3); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(3px); }
+      .modal-content { background: var(--bg-white); color: var(--text-main); width: 90%; max-width: 400px; border-radius: 12px; padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); position: relative; }
+      .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
+      .close-btn:hover { color: var(--primary-dark); }
+      .cart-list { list-style: none; padding: 0; margin: 0 0 20px 0; max-height: 300px; overflow-y: auto; }
+      .cart-item { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px solid var(--primary-light); }
+      .cart-item-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 16px; }
+      .cart-item-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+      .qty-controls { display: flex; align-items: center; gap: 15px; }
+      .qty-btn { flex: none; width: 32px; height: 32px; padding: 0; font-size: 18px; display: flex; justify-content: center; align-items: center; background: var(--primary-light); color: var(--primary-dark); }
+      .qty-btn:hover { background: var(--border-color); }
+      .delete-btn { flex: none; background: var(--danger); color: var(--bg-white); padding: 8px 16px; font-size: 14px; }
+      .delete-btn:hover { background: var(--danger-dark); }
+      .total-box { background: var(--primary); color: var(--bg-white); padding: 15px; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <div class="kiosk-container">
+      <div class="header">
+        <h1>🍩 Tatlı Evim</h1>
+        <div class="cart-icon" id="cartIcon">
+          🛒 <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+      </div>
+
+      <input type="text" id="aramaKutusu" class="search-box" placeholder="Tatlı mı tatlı 😋..." />
+
+      <div class="btn-group">
+        <button id="btnTumMenu" data-kategori="hepsi">Tüm Menü</button>
+        <button id="btnSutlu" data-kategori="sütlü">🥛 Sütlü Tatlılar</button>
+        <button id="btnCikolatali" data-kategori="çikolatalı">🍫 Çikolatalı Tatlılar</button>
+      </div>
+
+      <ul id="menuTahtasi" class="menu-list"></ul>
+    </div>
+
+    <div class="modal-overlay" id="cartModal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2 style="margin-top: 0; color: var(--primary-dark)">Sepetim</h2>
+        <ul class="cart-list" id="sepetListesi"></ul>
+        <div class="total-box" id="toplamTutar">Toplam: 0 TL</div>
+      </div>
+    </div>
+
+    <script>
+      const MenuDB = [
+        { id: 1, isim: "Waffle", fiyat: 250, kategori: "çikolatalı", populerMi: true },
+        { id: 2, isim: "Pankek", fiyat: 240, kategori: "çikolatalı", populerMi: false },
+        { id: 3, isim: "Lily", fiyat: 450, kategori: "sütlü", populerMi: true },
+        { id: 4, isim: "Jasmin", fiyat: 400, kategori: "sütlü", populerMi: false },
+      ];
+
+      class CartService {
+        constructor() {
+          this.items = [];
+        }
+
+        ekle(urun) {
+          const sepetteki = this.items.find(item => item.id === urun.id);
+          if (sepetteki) sepetteki.miktar++;
+          else this.items.push({ ...urun, miktar: 1 });
+        }
+
+        miktarDegistir(id, degisim) {
+          const urun = this.items.find(item => item.id === id);
+          if (!urun) return;
+          
+          urun.miktar += degisim;
+          if (urun.miktar <= 0) this.sil(id);
+        }
+
+        sil(id) {
+          this.items = this.items.filter(item => item.id !== id);
+        }
+
+        get toplamAdet() {
+          return this.items.reduce((toplam, item) => toplam + item.miktar, 0);
+        }
+
+        get toplamFiyat() {
+          return this.items.reduce((toplam, item) => toplam + (item.fiyat * item.miktar), 0);
+        }
+      }
+
+      class UIManager {
+        constructor() {
+          this.menuTahtasi = document.getElementById("menuTahtasi");
+          this.sepetListesi = document.getElementById("sepetListesi");
+          this.cartBadge = document.getElementById("cartBadge");
+          this.toplamTutarDiv = document.getElementById("toplamTutar");
+          this.cartModal = document.getElementById("cartModal");
+        }
+
+        menuCiz(liste, sepeteEkleCallback) {
+          this.menuTahtasi.innerHTML = "";
+
+          if (liste.length === 0) {
+            this.menuTahtasi.innerHTML = "<li class='menu-item'>Sonuç bulunamadı.</li>";
+            return;
+          }
+
+          liste.forEach(tatli => {
+            const populer = tatli.populerMi ? "<span class='populer-badge'>Popüler 🔥</span>" : "";
+            const ikon = tatli.kategori === "sütlü" ? "🥛 Sütlü" : "🍫 Çikolatalı";
+            
+            const li = document.createElement("li");
+            li.className = "menu-item";
+            li.innerHTML = `
+                <div>
+                    <strong>${tatli.isim}</strong> ${populer} <span class='kategori-badge'>${ikon}</span>
+                    <div style="margin-top: 5px;">${tatli.fiyat} TL</div>
+                </div>
+            `;
+            
+            const btn = document.createElement("button");
+            btn.className = "add-to-cart-btn";
+            btn.innerText = "Sepete Ekle";
+            btn.addEventListener("click", () => sepeteEkleCallback(tatli.id));
+            
+            li.appendChild(btn);
+            this.menuTahtasi.appendChild(li);
+          });
+        }
+
+        sepetCiz(cartService, miktarCallback, silCallback) {
+          this.cartBadge.innerText = cartService.toplamAdet;
+          this.toplamTutarDiv.innerText = `Toplam: ${cartService.toplamFiyat} TL`;
+          this.sepetListesi.innerHTML = "";
+
+          if (cartService.items.length === 0) {
+            this.sepetListesi.innerHTML = "<p style='text-align:center;'>Sepetiniz boş.</p>";
+            return;
+          }
+
+          cartService.items.forEach(item => {
+            const li = document.createElement("li");
+            li.className = "cart-item";
+            li.innerHTML = `
+                <div class="cart-item-info">
+                    <span>${item.isim}</span>
+                    <span>${item.fiyat * item.miktar} TL</span>
+                </div>
+                <div class="cart-item-controls">
+                    <div class="qty-controls">
+                        <button class="qty-btn" data-id="${item.id}" data-type="minus">-</button>
+                        <span style="font-weight:bold;">${item.miktar}</span>
+                        <button class="qty-btn" data-id="${item.id}" data-type="plus">+</button>
+                    </div>
+                    <button class="delete-btn" data-id="${item.id}">Sil</button>
+                </div>
+            `;
+
+            li.querySelector('[data-type="minus"]').addEventListener("click", () => miktarCallback(item.id, -1));
+            li.querySelector('[data-type="plus"]').addEventListener("click", () => miktarCallback(item.id, 1));
+            li.querySelector('.delete-btn').addEventListener("click", () => silCallback(item.id));
+
+            this.sepetListesi.appendChild(li);
+          });
+        }
+
+        modalAc() { this.cartModal.style.display = "flex"; }
+        modalKapat() { this.cartModal.style.display = "none"; }
+      }
+
+      class App {
+        constructor() {
+          this.cart = new CartService();
+          this.ui = new UIManager();
+          this.menu = MenuDB;
+          
+          this.olaylariBagla();
+          this.ui.menuCiz(this.menu, this.sepeteEkleHandler.bind(this));
+        }
+
+        sepeteEkleHandler(urunId) {
+          const urun = this.menu.find(u => u.id === urunId);
+          this.cart.ekle(urun);
+          this.arayuzuGuncelle();
+        }
+
+        miktarDegistirHandler(urunId, degisim) {
+          this.cart.miktarDegistir(urunId, degisim);
+          this.arayuzuGuncelle();
+        }
+
+        sepettenSilHandler(urunId) {
+          this.cart.sil(urunId);
+          this.arayuzuGuncelle();
+        }
+
+        arayuzuGuncelle() {
+          this.ui.sepetCiz(
+            this.cart, 
+            this.miktarDegistirHandler.bind(this), 
+            this.sepettenSilHandler.bind(this)
+          );
+        }
+
+        olaylariBagla() {
+          document.getElementById("cartIcon").addEventListener("click", () => this.ui.modalAc());
+          document.getElementById("closeModalBtn").addEventListener("click", () => this.ui.modalKapat());
+
+          document.getElementById("aramaKutusu").addEventListener("input", (e) => {
+            const metin = e.target.value.toLowerCase();
+            const sonuc = this.menu.filter(t => t.isim.toLowerCase().includes(metin));
+            this.ui.menuCiz(sonuc, this.sepeteEkleHandler.bind(this));
+          });
+
+          const filterButtons = document.querySelectorAll(".btn-group button");
+          filterButtons.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+              document.getElementById("aramaKutusu").value = "";
+              const kategori = e.target.dataset.kategori;
+              
+              const filtreliMenu = kategori === "hepsi" 
+                ? this.menu 
+                : this.menu.filter(t => t.kategori === kategori);
+                
+              this.ui.menuCiz(filtreliMenu, this.sepeteEkleHandler.bind(this));
+            });
+          });
+        }
+      }
+      const tatliEvimApp = new App();
+
+    </script>
+  </body>
+</html>

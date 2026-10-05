@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoftITo Akademi - 50 Soruluk Eleme Sınavı (45 Dakika)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    code, pre { font-family: 'Fira Code', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .timer-blink { animation: blinker 1s linear infinite; color: #ef4444; }
+    @keyframes blinker { 50% { opacity: 0; } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-100">
+          ST
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Yazılım Akademisi Eleme Kokpiti</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">HTML5 (12), CSS3 (12), JavaScript (11), Dart (15) - Toplam 50 Soru</p>
+        </div>
+      </div>
+
+      <!-- Live Counters & Timer -->
+      <div class="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm font-semibold">
+        <!-- Countdown Timer -->
+        <div class="flex items-center space-x-2 px-4 py-1.5 rounded-lg bg-slate-900 text-white shadow-md">
+          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span id="timerDisplay" class="font-mono text-base font-bold tracking-widest">45:00</span>
+        </div>
+        <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hidden sm:flex">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Doğru:</span>
+          <span id="correctCounter" class="font-bold">0</span>
+        </div>
+        <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 hidden sm:flex">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>Yanlış:</span>
+          <span id="wrongCounter" class="font-bold">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="bg-slate-100/70 border-t border-slate-200 px-4 sm:px-6 lg:px-8 py-2 overflow-x-auto">
+      <div class="max-w-7xl mx-auto flex items-center space-x-2 text-xs font-medium" id="categoryFilters">
+        <button data-cat="all" class="cat-btn px-3 py-1 rounded-full bg-indigo-600 text-white shadow-xs">Tüm Konular (50)</button>
+        <button data-cat="HTML5" class="cat-btn px-3 py-1 rounded-full bg-white text-slate-600 hover:bg-slate-200">HTML5 (12)</button>
+        <button data-cat="CSS3" class="cat-btn px-3 py-1 rounded-full bg-white text-slate-600 hover:bg-slate-200">CSS3 (12)</button>
+        <button data-cat="JavaScript" class="cat-btn px-3 py-1 rounded-full bg-white text-slate-600 hover:bg-slate-200">JavaScript (11)</button>
+        <button data-cat="Dart" class="cat-btn px-3 py-1 rounded-full bg-white text-slate-600 hover:bg-slate-200">Dart (15)</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Left / Center: Active Question Area (8 Cols) -->
+    <section class="lg:col-span-8 flex flex-col space-y-4">
+      
+      <!-- Progress Bar Container -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col space-y-2">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-500">
+          <span id="progressText">Soru: 1 / 50</span>
+          <span id="progressPercent">0% Tamamlandı</span>
+        </div>
+        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+          <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 2%"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col flex-1 relative overflow-hidden" id="questionCard">
+        
+        <!-- Question Badge & Action Header -->
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-2">
+            <span id="badgeCategory" class="px-3 py-1 rounded-lg text-xs font-bold tracking-wide uppercase border">Kategori</span>
+            <span id="questionTopicBadge" class="hidden sm:inline-block px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">Konu</span>
+          </div>
+          <span id="questionIndexBadge" class="text-sm font-bold text-slate-400">#1</span>
+        </div>
+
+        <!-- Question Prompt -->
+        <h2 id="questionPrompt" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-3">Soru yükleniyor...</h2>
+
+        <!-- Optional Code Snippet Block -->
+        <div id="codeSnippetBox" class="hidden mb-4 p-4 rounded-xl bg-slate-900 text-slate-100 text-xs sm:text-sm overflow-x-auto border border-slate-800">
+          <pre><code id="codeSnippetText"></code></pre>
+        </div>
+
+        <!-- Options Container -->
+        <div id="optionsContainer" class="flex flex-col space-y-3 my-4"></div>
+
+        <!-- Instant Explanation & Educational Feedback Box -->
+        <div id="explanationBox" class="hidden mt-6 p-5 rounded-2xl border transition-all duration-300 ease-out">
+          <div class="flex items-start space-x-3">
+            <div id="explanationIcon" class="mt-0.5 text-xl font-bold">💡</div>
+            <div class="flex-1 text-sm leading-relaxed">
+              <h4 id="explanationTitle" class="font-bold text-base mb-1">Açıklama</h4>
+              <p id="explanationText" class="text-slate-700"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
+          <button id="prevBtn" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">← Önceki Soru</button>
+          <div class="text-xs text-slate-400 italic hidden sm:block">Şıklardan birini seçtiğiniz an cevap değerlendirilir.</div>
+          <button id="nextBtn" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-all flex items-center space-x-1">
+            <span>Sonraki Soru</span><span>→</span>
+          </button>
+        </div>
+
+      </article>
+
+    </section>
+
+    <!-- Right: Question Matrix & Overview Panel (4 Cols) -->
+    <aside class="lg:col-span-4 flex flex-col space-y-4">
+      
+      <!-- Score & Summary Card -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col flex-1">
+        <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center justify-between">
+          <span>Sınav Haritası (50 Soru)</span>
+        </h3>
+
+        <!-- Status Legend -->
+        <div class="grid grid-cols-3 gap-2 text-[11px] font-medium text-slate-600 mb-4 pb-3 border-b border-slate-100">
+          <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500"></span><span>Doğru</span></div>
+          <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-md bg-rose-500"></span><span>Yanlış</span></div>
+          <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-md bg-slate-200 border border-slate-300"></span><span>Boş</span></div>
+        </div>
+
+        <!-- 50 Questions Grid Matrix -->
+        <div id="matrixGrid" class="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-5 gap-1.5 overflow-y-auto pr-1 flex-1 min-h-[300px]"></div>
+
+        <!-- Bottom Result Actions -->
+        <div class="mt-5 pt-4 border-t border-slate-100 flex flex-col space-y-2">
+          <button id="finishReviewBtn" class="w-full py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-lg">
+            Sınavı Bitir & Sonucu Gör
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Concept Note Box -->
+      <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-5 text-white shadow-sm">
+        <div class="text-[11px] uppercase tracking-wider font-bold text-indigo-300 mb-1">Mülakat ve Sınav İpucu</div>
+        <h4 class="text-sm font-semibold mb-2">Hocanın Altın Kuralları</h4>
+        <p class="text-xs text-slate-300 leading-relaxed italic">
+          "Ezberlemeyin, mantığını kavrayın. Her zaman 'const' ile başlayın, 'let'e ihtiyaç duyarsanız dönüştürün. 'var' kullanırsanız elenirsiniz! Mobil öncelikli (Mobile First) düşünmek bir tercih değil, mimari zorunluluktur."
+        </p>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Modal for Final Exam Card Summary -->
+  <dialog id="resultModal" class="rounded-3xl p-0 backdrop:bg-slate-900/80 shadow-2xl border border-slate-200 max-w-md w-full">
+    <div class="p-6 sm:p-8 bg-white flex flex-col space-y-5">
+      <div class="text-center">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 mx-auto flex items-center justify-center text-3xl mb-3 shadow-inner">🏆</div>
+        <h3 class="text-xl font-extrabold text-slate-900">Mülakat Ön Eleme Sonucu</h3>
+        <p class="text-xs text-slate-500 mt-1">24 kişilik kontenjan için genel değerlendirme</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-100"><div class="text-xs text-emerald-600 font-semibold">Doğru</div><div id="modalCorrect" class="text-2xl font-black text-emerald-700 mt-1">0</div></div>
+        <div class="p-3 bg-rose-50 rounded-2xl border border-rose-100"><div class="text-xs text-rose-600 font-semibold">Yanlış</div><div id="modalWrong" class="text-2xl font-black text-rose-700 mt-1">0</div></div>
+        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200"><div class="text-xs text-slate-600 font-semibold">Boş</div><div id="modalUnanswered" class="text-2xl font-black text-slate-700 mt-1">50</div></div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-700 space-y-2">
+        <div class="flex justify-between"><span>Net Başarı Oranı:</span><span id="modalSuccessRate" class="font-bold text-slate-900">0%</span></div>
+        <div class="flex justify-between"><span>Kalan Süre:</span><span id="modalTimeLeft" class="font-bold text-slate-900">--:--</span></div>
+        <div class="flex justify-between border-t pt-2 mt-2"><span>Değerlendirme:</span><span id="modalGradeComment" class="font-semibold text-indigo-600 text-right w-2/3">Değerlendiriliyor...</span></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button id="closeModalBtn" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">Sorulara Dön</button>
+        <button id="modalRestartBtn" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 transition">Sınavı Sıfırla</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // 50 Questions Data Source (12 HTML5, 12 CSS3, 11 JavaScript, 15 Dart)
+    const quizData = [
+      // HTML5 (12 Soru)
+      { id: 1, category: "HTML5", topic: "Viewport Mantığı", prompt: "Mobil cihazlarda sitenin doğru ölçeklenmesi için kullanılan viewport etiketinde boş bırakılan yerlere sırasıyla hangileri gelmelidir?", code: `<meta name="viewport" content="width=[BOŞLUK_1], [BOŞLUK_2]=1.0">`, options: ["device-width / initial-scale", "100vw / zoom", "max-width / scale", "screen-width / default-scale"], answer: 0, explanation: "width=device-width cihaz genişliğini yakalar, initial-scale=1.0 ise yakınlaştırma (zoom) seviyesini sıfırlar." },
+      { id: 2, category: "HTML5", topic: "DOM ve Render Tree", prompt: "Tarayıcı motoru HTML'i okuyup DOM Ağacını çıkarır. CSS okuyup CSSOM ağacını çıkarır. Bu iki ağacın birleşip ekrana çizilen nihai iskeleti oluşturduğu yapıya ne ad verilir?", code: null, options: ["Event Loop", "Render Tree Motoru", "Shadow DOM", "Web Assembly (Wasm)"], answer: 1, explanation: "DOM ve CSSOM birleşerek doğrudan ekranda piksellere dönüşecek olan Render Tree'yi (Oluşturma Ağacı) meydana getirir." },
+      { id: 3, category: "HTML5", topic: "Semantik Mimari", prompt: "Erişilebilirlik (a11y) kurallarına göre, sayfada yalnızca BİR KEZ kullanılması gereken ve sayfanın en temel içeriğini saran HTML5 semantik etiketi hangisidir?", code: null, options: ["<section>", "<article>", "<main>", "<header>"], answer: 2, explanation: "<main> etiketi sayfaya özgü birincil ve benzersiz içeriği temsil eder, sayfada birden fazla bulunmamalıdır." },
+      { id: 4, category: "HTML5", topic: "Mobil Klavyeler", prompt: "Kredi kartı girişi için mobilde sadece rakam klavyesini açan ve klavyenin onay tuşunu 'Git' olarak değiştiren nitelikler hangi seçenekte doğru verilmiştir?", code: `<input type="text" inputmode="[BOŞLUK_1]" enterkeyhint="[BOŞLUK_2]">`, options: ["numeric / go", "tel / submit", "decimal / next", "text / search"], answer: 0, explanation: "inputmode='numeric' sadece rakam tuş takımını açar. enterkeyhint='go' mobil klavye eylem tuşuna 'Git' anlamı yükler." },
+      { id: 5, category: "HTML5", topic: "Form Deneyimi", prompt: "Mobil cihazlarda ad-soyad alanında her kelimenin ilk harfinin otomatik büyük başlatılmasını sağlayan özellik hangisidir?", code: `<input type="text" name="fullname" _____="words">`, options: ["autocomplete", "autofocus", "autocorrect", "autocapitalize"], answer: 3, explanation: "autocapitalize='words' her kelimenin ilk harfini büyük yapar. 'characters' tüm harfleri, 'sentences' ise cümle başlarını büyütür." },
+      { id: 6, category: "HTML5", topic: "Yerel Validasyon", prompt: "Sadece 3 haneli rakam girilmesini zorunlu kılan Regex tabanlı HTML5 HTML5 doğrulama kodu hangisidir?", code: `<input type="text" _____="[0-9]{3}" required>`, options: ["pattern", "match", "regex", "validate"], answer: 0, explanation: "pattern niteliği JavaScript'e gerek kalmadan regex (düzenli ifade) ile form yerel doğrulamasını (validation) üstlenir." },
+      { id: 7, category: "HTML5", topic: "Siber Savunma", prompt: "Spam botları yakalamak için kurulan Honeypot tuzağında gizli input'un stil ve sekme ayarı nasıl olmalıdır?", code: `<input type="text" name="bot_trap" style="_____" tabindex="_____">`, options: ["visibility: hidden / 0", "display: none / -1", "opacity: 0 / 1", "z-index: -99 / 99"], answer: 1, explanation: "Honeypot alanını gizlemek için display: none ve klavye sekmesiyle (Tab) yakalanmaması için tabindex='-1' kullanılır." },
+      { id: 8, category: "HTML5", topic: "Arayüz Elemanları", prompt: "Sıfır JavaScript ile akordiyon (SSS) kutusu yapan HTML5 etiket ikilisi hangisidir?", code: null, options: ["<accordion> ve <item>", "<dialog> ve <modal>", "<details> ve <summary>", "<collapse> ve <title>"], answer: 2, explanation: "<details> (kutu) ve <summary> (başlık) etiketleri doğal katlanabilir akordiyon yapısı sağlar." },
+      { id: 9, category: "HTML5", topic: "Responsive Görsel", prompt: "Cihazın çözünürlüğüne veya ekran genişliğine göre farklı resim dosyaları yükleyen <picture> etiketi içerisinde alternatifler hangi etiketle sunulur?", code: `<picture>\n  <_____ media="(min-width: 800px)" srcset="large.jpg">\n  <img src="small.jpg">\n</picture>`, options: ["<source>", "<track>", "<option>", "<link>"], answer: 0, explanation: "<picture> etiketi içerisinde birden fazla <source> kullanarak responsive görsel stratejisi belirlenir, sona her zaman fallback olarak <img> eklenir." },
+      { id: 10, category: "HTML5", topic: "Streaming Mimarisi", prompt: "Videonun tüm boyutunu indirmek yerine sadece süresini ve kapağını indirerek veri tasarrufu sağlayan nitelik hangisidir?", code: `<video src="ders.mp4" preload="_____" playsinline controls></video>`, options: ["none", "auto", "metadata", "lazy"], answer: 2, explanation: "preload='metadata' sadece videonun üst verilerini (boyut, süre) çeker. auto tüm videoyu indirir." },
+      { id: 11, category: "HTML5", topic: "Depolama Savaşları", prompt: "XSS zafiyetinde kötü amaçlı scriptlerin doğrudan okuyabileceği; sekme kapansa bile 5-10 MB kalıcı veri saklayan depolama birimi hangisidir?", code: null, options: ["Cookies", "SessionStorage", "IndexedDB", "LocalStorage"], answer: 3, explanation: "LocalStorage kalıcıdır ancak XSS ataklarında innerHTML üzerinden enjekte edilen zararlı JS ile doğrudan sızdırılabilir. Hassas veriler asla konmaz." },
+      { id: 12, category: "HTML5", topic: "Yerel Göstergeler", prompt: "Disk doluluk oranı veya pil seviyesi gibi anlık sınırlar arasındaki ölçümleri renk skalasıyla (low/high) gösteren etiket hangisidir?", code: `<_____ value="75" min="0" max="100" low="20" high="80">`, options: ["<progress>", "<meter>", "<gauge>", "<range>"], answer: 1, explanation: "<meter> kapasite ve anlık seviyeleri (pil, disk) ölçer. <progress> ise devam eden görev (indirme süreci) için kullanılır." },
+
+      // CSS3 (12 Soru)
+      { id: 13, category: "CSS3", topic: "Ekleme Yöntemleri", prompt: "Mobil performansı mükemmel kılan, tarayıcının önbelleğe aldığı (cache) ve kurumsal projelerde zorunlu olan CSS ekleme yöntemi hangisidir?", code: null, options: ["Inline (<div style='...'>)", "Internal (<style>... </style>)", "External (<link href='style.css'>)", "JS ile DOM Manipülasyonu"], answer: 2, explanation: "External (Dışarıdan çağrılan CSS) tek bir dosyadan gelir, cachelenir ve yüzlerce sayfanın aynı anda çok hızlı render edilmesini sağlar." },
+      { id: 14, category: "CSS3", topic: "Özgüllük (Specificity)", prompt: "Aşağıdaki kural grubunda CSS puanı en yüksek (100 Puan) olup elementi boyayacak seçici hangisidir?", code: `div { color: red; } /* A */\n.text-bold { color: blue; } /* B */\n#main-title { color: green; } /* C */\n* { color: black; } /* D */`, options: ["div", ".text-bold", "#main-title", "*"], answer: 2, explanation: "Specificity tablosunda ID seçiciler (#) 100 puan değerindedir ve Sınıf (10 puan) veya Etiket (1 puan) seçicileri ezer." },
+      { id: 15, category: "CSS3", topic: "Kutu Modeli", prompt: "Bir elemana genişlik verdikten sonra eklenen padding ve border değerlerinin, tasarımı patlatıp taşırmaması için kullanılan altın kural hangisidir?", code: `* {\n  box-sizing: _____;\n}`, options: ["content-box", "border-box", "margin-box", "padding-box"], answer: 1, explanation: "border-box kuralında padding ve border, elemanın verilen genişliğine dahildir; dışa taşma yapmaz, içeriye doğru sıkışır." },
+      { id: 16, category: "CSS3", topic: "Metin Kesme (Truncate)", prompt: "Taşan uzun metinlerin alt satıra geçmesini engelleyip sonuna '...' ekleyen üçlü kural setinde eksik olan değerler hangileridir?", code: `.truncate {\n  white-space: [BOŞLUK_1];\n  overflow: hidden;\n  text-overflow: [BOŞLUK_2];\n}`, options: ["nowrap / ellipsis", "pre / clip", "break-spaces / fade", "normal / hidden"], answer: 0, explanation: "white-space: nowrap (tek satırda tutar), text-overflow: ellipsis (sonuna üç nokta koyar)." },
+      { id: 17, category: "CSS3", topic: "Dark Mode Temalar", prompt: "Kullanıcının işletim sisteminin 'Karanlık Mod'da olup olmadığını yakalayarak :root değişkenlerini değiştiren medya sorgusu hangisidir?", code: `@media (_____) {\n  :root { --bg: #000; --text: #fff; }\n}`, options: ["color-scheme: dark", "prefers-color-scheme: dark", "theme: dark-mode", "os-theme: dark"], answer: 1, explanation: "prefers-color-scheme: dark sorgusu cihazın yerel karanlık mod tercihini anında CSS'e aktarır." },
+      { id: 18, category: "CSS3", topic: "Konumlandırma", prompt: "Normal sayfa akışında ilerleyen, ancak belirlenen eşiğe (ör: top: 0) geldiğinde cama kilitlenmiş gibi yapışan position değeri nedir?", code: `.header {\n  position: _____;\n  top: 0;\n}`, options: ["absolute", "fixed", "relative", "sticky"], answer: 3, explanation: "sticky akışta yer tutar ve scroll belirtilen eşiğe geldiğinde fixed gibi davranarak kilitlenir." },
+      { id: 19, category: "CSS3", topic: "Z-Index", prompt: "z-index özelliğinin bir HTML etiketinde çalışabilmesi için o elemanın HANGİ koşulu sağlaması zorunludur?", code: null, options: ["display: flex olması gerekir", "width ve height verilmesi gerekir", "position değerinin 'static' dışında bir değer alması gerekir", "Sadece :absolute ile çalışır"], answer: 2, explanation: "Z-index yalnızca position özelliği relative, absolute, fixed veya sticky olarak atanmış elementler üzerinde katman hesabı yapar." },
+      { id: 20, category: "CSS3", topic: "Flexbox Container", prompt: "Flexbox mimarisinde elemanları yatayda/ana eksende hizalayan ve çoklu elemanların alt satıra inmesini sağlayan komutlar sırasıyla nelerdir?", code: `.flex-container {\n  _____: center;\n  _____: wrap;\n}`, options: ["align-items / flex-direction", "justify-content / flex-wrap", "align-content / display", "place-items / overflow"], answer: 1, explanation: "justify-content ana eksende (row için yatay) hizalar. flex-wrap: wrap sığmayanları alt satıra kırar." },
+      { id: 21, category: "CSS3", topic: "Flexbox Children", prompt: "Flexbox içindeki bir avatar resminin alanı daralsa bile kendi genişliğini asla küçültmeyip korumasını sağlayan CSS özelliği nedir?", code: `.avatar {\n  _____: 0;\n}`, options: ["flex-shrink", "flex-grow", "flex-basis", "align-self"], answer: 0, explanation: "flex-shrink: 0 elemanın büzülmesini (küçülmesini) yasaklar. Avatar görsellerinde ezilmeyi engeller." },
+      { id: 22, category: "CSS3", topic: "Grid Mimarisi", prompt: "Medya sorgusu (@media) yazmadan, ekrana sığdığı kadar sütun açıp kartları responsiv olarak dizen Grid kuralı hangisidir?", code: `grid-template-columns: repeat(_____, minmax(250px, 1fr));`, options: ["auto-fill", "auto-fit", "max-content", "min-content"], answer: 1, explanation: "auto-fit kalan boşluğu eşit (1fr) dağıtarak kartların tüm satırı kaplamasını ve küçüldükçe alt satıra inmesini sağlar." },
+      { id: 23, category: "CSS3", topic: "Mobil İlk Mimari", prompt: "Mobile-First yaklaşımında varsayılan CSS kuralı mobil için yazılırken ekran büyüdükçe tetiklenen @media sorgularında hangi ölçü birimi kullanılır?", code: `@media (_____: 768px) { ... }`, options: ["max-width", "min-height", "orientation", "min-width"], answer: 3, explanation: "Mobile-first tasarımında varsayılan ekran mobildir. Ekran genişledikçe kodlar min-width (örn. en az 768px tablet) sorgularıyla üzerine inşa edilir." },
+      { id: 24, category: "CSS3", topic: "BEM ve Pseudo", prompt: "BEM metodolojisine göre, 'card' bloğunun içindeki 'image' elemanının 'rounded' (yuvarlak) varyasyonunu belirten DOĞRU sınıf isimlendirmesi hangisidir?", code: null, options: [".card-image-rounded", ".card__image--rounded", ".card--image__rounded", ".card_image_rounded"], answer: 1, explanation: "BEM'de alt eleman çift alt tire (__) ile, değiştirici varyasyon ise çift orta tire (--) ile ayrılır: blok__eleman--varyasyon." },
+
+      // JavaScript (11 Soru)
+      { id: 25, category: "JavaScript", topic: "Değişken Disiplini", prompt: "Hocanın kuralına göre neden 'var' kullanılmamalıdır ve 'const' nesnelerinin içeriği nasıl değiştirilebilir?", code: `const arac = { renk: 'Kırmızı' };\narac.renk = 'Beyaz'; // Bu işlem hata verir mi?`, options: ["var blok kapsamlıdır. / Hata verir.", "var dışarı sızar (TDZ yoktur). / Hata vermez, const sadece bellek referansını kilitler, içindeki özellikleri (property) değiştirmeye izin verir.", "var kullanımdan kaldırıldı. / Nesneler asla değişmez.", "var daha hızlıdır. / Obje yeniden tanımlanmalıdır."], answer: 1, explanation: "var süslü parantez dinlemez ve dışarı sızar (Function scope). const referansı korur, ancak obje içindeki anahtar değerleri değiştirilebilir." },
+      { id: 26, category: "JavaScript", topic: "Tip Çevrimi (Coercion)", prompt: "Aşağıdaki kodların çıktısı sırasıyla ne olur?", code: `console.log("5" + 2);\nconsole.log("5" * 2);`, options: ["7 ve 10", "52 ve NaN", "'52' ve 10", "TypeError"], answer: 2, explanation: "+ operatörü string görünce birleştirme yapar ('52'). * operatörü ise string'i zorla matematiğe sokarak Number'a çevirir (10)." },
+      { id: 27, category: "JavaScript", topic: "Falsy Değerler", prompt: "JavaScript'te if(değer) kontrolünde koşulun ÇALIŞMAYACAĞI (false döneceği) 'Falsy' değerlerin TAM LİSTESİ hangisidir?", code: null, options: ["0, '', null, undefined, NaN, false", "0, '0', null, undefined", "-1, '', null, false", "undefined, NaN, null, []"], answer: 0, explanation: "Boş string (''), 0, null, undefined, NaN ve false dilin doğası gereği otomatik olarak 'false' kabul edilir. (Boş dizi [] true döner)." },
+      { id: 28, category: "JavaScript", topic: "Arrow Functions", prompt: "Tek parametre alan ve sonucu hemen döndüren modern ok fonksiyonu (Arrow Function) en kısa nasıl yazılır?", code: null, options: ["const karesi = (sayi) { return sayi * sayi; }", "const karesi = sayi => sayi * sayi;", "const karesi = function(s) => s * s;", "const karesi(sayi) => return sayi * sayi;"], answer: 1, explanation: "Arrow fonksiyonlarda tek parametre varsa parantezler, tek satır return varsa süslü parantezler ve 'return' kelimesi atılabilir." },
+      { id: 29, category: "JavaScript", topic: "Dizi Mutasyonu", prompt: "Aşağıdaki metodlardan hangisi orijinal diziyi DEĞİŞTİRMEZ (Non-mutating), aksine yepyeni bir dizi döndürür?", code: `const sayilar = [1, 2, 3];\n// sayilar.push(4) orijinali bozar.`, options: ["splice()", "pop()", "shift()", "filter()"], answer: 3, explanation: "push, pop, shift, splice orijinal diziyi bozar. map, filter, slice ve concat ise yepyeni bir dizi klonlayıp işlemler." },
+      { id: 30, category: "JavaScript", topic: "Dizi Metotları", prompt: "Bir dizi içerisindeki tüm sayıları toplayıp tek bir sonuç çıkarmak (biriktirmek) için hangi fonksiyon kullanılır?", code: `const toplam = fiyatlar.____((akim, fiyat) => akim + fiyat, 0);`, options: ["reduce", "map", "forEach", "filter"], answer: 0, explanation: "reduce() fonksiyonu bir akümülatör kullanarak dizideki tüm değerleri tek bir değere (toplam vb.) indirger." },
+      { id: 31, category: "JavaScript", topic: "DOM Seçiciler", prompt: "Sınıfı 'kart' olan div içindeki ilk 'h3' başlığını karmaşık CSS yoluyla seçen komut hangisidir?", code: `const baslik = document.____('.kart > h3');`, options: ["getElementById", "getElementsByTagName", "querySelector", "querySelectorAll"], answer: 2, explanation: "querySelector() içerisine CSS kuralı yazmanızı sağlar ve eşleşen ilk tekil elemanı DOM üzerinden döndürür." },
+      { id: 32, category: "JavaScript", topic: "XSS ve Güvenlik", prompt: "Kullanıcının yorumunu ekrana basarken zararlı `<script>` etiketlerinin derlenmesini engelleyen GÜVENLİ DOM komutu hangisidir?", code: `yorumKutusu._____ = userData;`, options: ["innerHTML", "value", "outerHTML", "textContent"], answer: 3, explanation: "innerHTML kullanıcı kodunu HTML olarak derleyip XSS saldırısı yaratır. textContent kodu düz metin olarak güvenle ekrana basar." },
+      { id: 33, category: "JavaScript", topic: "Event Delegation", prompt: "Listeye sonradan eklenen yüzlerce 'Sil' butonuna tek tek event eklemek yerine, ana listeye (ul) bir event ekleyip olayı yakalama tekniğine ne ad verilir?", code: `ul.addEventListener('click', e => {\n  if(e.target.matches('.sil-btn')) { ... }\n});`, options: ["Event Bubbling", "Event Delegation", "Debouncing", "Throttling"], answer: 1, explanation: "Olay Yetkilendirmesi (Event Delegation), olayların kabarması (bubbling) prensibinden faydalanarak tek dinleyici ile tüm alt elemanları yönetmektir." },
+      { id: 34, category: "JavaScript", topic: "Event Loop Mimarisi", prompt: "Call Stack boşaldığında, Event Loop ilk olarak hangi kuyruktaki (Queue) işlemleri alır ve ana akışa sokar?", code: null, options: ["Callback Queue (setTimeout)", "Microtask Queue (Promise / Async)", "Web APIs", "Render Queue"], answer: 1, explanation: "Event Loop öncelikli olarak Promise çözümlerinin bulunduğu Microtask kuyruğunu tamamen temizler, ardından setTimeout gibi Callback (Macrotask) kuyruğuna geçer." },
+      { id: 35, category: "JavaScript", topic: "Asenkron Programlama", prompt: "Aynı anda 3 farklı API'den paralel olarak veri çekmek ve hepsi tamamlandığında (en yavaş olan kadar bekleyerek) yoluna devam etmek için hangi metot kullanılır?", code: `const veriler = await Promise.____([fetchX(), fetchY(), fetchZ()]);`, options: ["race", "all", "any", "allSettled"], answer: 1, explanation: "Promise.all() kendisine verilen tüm asenkron işlemleri paralel başlatır ve hepsinin başarılı (resolve) olmasını bekler. Hata varsa fail-fast yapar." },
+
+      // Dart (15 Soru)
+      { id: 36, category: "Dart", topic: "Değişkenler ve Null Safety", prompt: "Dart dilinde bir değişkenin değerinin boş (null) olabileceğini baştan belirtmek (Null Safety) için hangi operatör kullanılır?", code: `String[BOŞLUK] kullaniciAdi;`, options: ["??", "!", "?", "late"], answer: 2, explanation: "Tipin sonuna soru işareti (?) eklemek (örn: String? isim), bu değişkenin 'null' değer alabileceğini derleyiciye bildirir." },
+      { id: 37, category: "Dart", topic: "Fonksiyon Parametreleri", prompt: "Fonksiyon çağrılırken parametre isimlerini zorunlu kılan ve sırasını önemsiz hale getiren (Named Parameters) yazım şekli hangisidir?", code: `void kullaniciKayit([BOŞLUK] { String ad, int yas }) {}`, options: ["required", "final", "const", "named"], answer: 0, explanation: "Süslü parantez {} içindeki isimli parametrelerde değerin verilmesini zorunlu tutmak için 'required' anahtar kelimesi kullanılır." },
+      { id: 38, category: "Dart", topic: "Koleksiyonlar", prompt: "Dart dilinde içerisinde 'aynı veriden birden fazla bulunmasına ASLA izin vermeyen' yapı hangisidir?", code: null, options: ["List", "Map", "Array", "Set"], answer: 3, explanation: "Set koleksiyonları, aynı elemanın tekrar eklenmesine izin vermez, benzersiz (unique) kümeler oluşturur." },
+      { id: 39, category: "Dart", topic: "Koleksiyon İçi İşlemler", prompt: "Bir listenin içindeki elemanları klonlayıp başka bir listenin tam ortasına saçarak (genişleterek) ekleyen operatör hangisidir?", code: `var yeniListe = [1, 2, [BOŞLUK]eskiListe, 5, 6];`, options: ["...", "===", "=>", "??"], answer: 0, explanation: "Spread operatörü (...) bir koleksiyonun elemanlarını paketinden çıkarıp başka bir koleksiyonun içine eklemek için kullanılır." },
+      { id: 40, category: "Dart", topic: "Sabit Seçenekler (Enum)", prompt: "Aşağıdaki kodda sipariş durumlarını güvenli gruplamak için kullanılan anahtar kelime nedir?", code: `[BOŞLUK] SiparisDurumu {\n  beklemede,\n  onaylandi,\n  teslimEdildi\n}`, options: ["class", "struct", "enum", "type"], answer: 2, explanation: "Enum'lar, kategorileri veya durumları sabit seçenekler halinde gruplayıp güvenli (tip denetimli) kod yazmayı sağlar." },
+      { id: 41, category: "Dart", topic: "Nesne Yönelimli (OOP)", prompt: "Kalıtım (Inheritance) yönteminde üst sınıfın (Superclass) özelliklerini alt sınıfa geçirmek için hangi anahtar kelime kullanılır?", code: `class Yonetici [BOŞLUK] Calisan { ... }`, options: ["implements", "with", "extends", "inherits"], answer: 2, explanation: "extends anahtar kelimesi, bir sınıfın (Yonetici) diğer bir sınıfın (Calisan) soyundan geldiğini ve metodlarını miras aldığını belirtir." },
+      { id: 42, category: "Dart", topic: "Records (Kayıtlar)", prompt: "Dart 3.0 ile gelen; bir fonksiyondan aynı anda birden fazla farklı tipte değer döndürmeyi sağlayan (Parçalama) yapı hangisidir?", code: `(String, int) veriGetir() {\n  return ('Ali', 28);\n}`, options: ["Tuples", "Records", "Generics", "DataClass"], answer: 1, explanation: "Records, objeye çevirmeden güvenli şekilde birden çok veriyi (String, int) paketleyip fonksiyondan dışarı çıkarmamızı sağlar." },
+      { id: 43, category: "Dart", topic: "Kontrol Yapıları", prompt: "Switch-case yerine değer döndüren modern Switch Expressions (İfadeleri) yapısında, varsayılan (default) durum hangi işaretle belirtilir?", code: `var sonuc = switch(durum) {\n  1 => 'Başarılı',\n  [BOŞLUK] => 'Bilinmeyen'\n};`, options: ["*", "_", "default", "?"], answer: 1, explanation: "Switch ifadelerinde '_' (alt tire) karakteri her koşulu kapsayan varsayılan (default / joker) durumu temsil eder." },
+      { id: 44, category: "Dart", topic: "Hata Yönetimi", prompt: "Try-catch bloğu içinde özel olarak yakalanan bir hatayı zorla fırlatmak ve programı bilinçli kırmak için ne kullanılır?", code: `if(yas < 18) {\n  [BOŞLUK] FormatException('Yaş 18den küçük olamaz');\n}`, options: ["catch", "break", "throw", "return"], answer: 2, explanation: "throw komutu manuel olarak Exception (Hata) fırlatılmasını ve yazılım akışının kontrollü kesilmesini sağlar." },
+      { id: 45, category: "Dart", topic: "Soyutlama (Abstract)", prompt: "Nesnesi (instance) ASLA üretilemeyen, sadece diğer alt sınıflara şablon ve kurallar koymak için oluşturulan sınıf türü hangisidir?", code: `[BOŞLUK] class Sekil {\n  double alanHesapla();\n}`, options: ["sealed", "interface", "abstract", "static"], answer: 2, explanation: "Abstract (Soyut) sınıflardan doğrudan nesne (new Sekil()) üretilemez. İçinde gövdesiz fonksiyonlar barındırıp alt sınıflara kural dayatır." },
+      { id: 46, category: "Dart", topic: "Kapsülleme (Encapsulation)", prompt: "Dart dilinde sınıf içindeki bir değişkeni veya metodu dış dünyadan (diğer dosyalardan) gizlemek (private) için başına ne konur?", code: `String [BOŞLUK]gizliAnahtar = "ABC123";`, options: ["private", "secret", "-", "_"], answer: 3, explanation: "Dart dilinde 'private' kelimesi yoktur. Değişkenin veya metodun başına alt tire (_) konularak kütüphane/dosya seviyesinde gizlenir." },
+      { id: 47, category: "Dart", topic: "Yapıcılar (Constructors)", prompt: "Aynı sınıf içinde birden fazla yapıcı blok oluşturmak (örn: Json'dan okumak veya boş nesne üretmek) için kullanılan yöntem nedir?", code: `class Kullanici {\n  Kullanici.jsonOkuyucu(Map veri) { ... }\n}`, options: ["İsimlendirilmiş (Named) Constructors", "Statik Yapıcı", "Aşırı Yükleme (Overloading)", "Super Constructor"], answer: 0, explanation: "Dart'ta Constructor Overloading (aynı ismi tekrar kullanma) yoktur. Bunun yerine SınıfAdı.isimli( ) formatında İsimlendirilmiş Yapıcılar kullanılır." },
+      { id: 48, category: "Dart", topic: "Factory Constructor", prompt: "Yeni bir nesne oluşturmak yerine, halihazırda önbellekte (cache) olan var olan bir nesneyi return etmek için sınıf yapıcılarında ne kullanılır?", code: `[BOŞLUK] Veritabani() {\n  return _cacheObjesi;\n}`, options: ["static", "factory", "singleton", "const"], answer: 1, explanation: "Factory kurucuları her çağrıldığında yeni hafıza (RAM) adresi üretmek zorunda değildir; return kelimesiyle mevcut nesneyi (singleton gibi) döndürebilir." },
+      { id: 49, category: "Dart", topic: "Genişletmeler (Extensions)", prompt: "Dart dilinde var olan kök tiplere (örneğin String sınıfına) kaynak kodunu değiştirmeden yeni yetenekler/metotlar kazandırmak için ne kullanılır?", code: `[BOŞLUK] MetinIslemleri on String {\n  bool ilkHarfBuyukMu() => ...\n}`, options: ["extension", "mixin", "implement", "prototype"], answer: 0, explanation: "Extensions (Genişletmeler) kütüphanelerde değişiklik yapmadan primitif veya kompleks sınıflara özel fonksiyonlar (String.ilkHarfBuyukMu) ekler." },
+      { id: 50, category: "Dart", topic: "Çoklu Özellik Aktarımı (Mixins)", prompt: "Kalıtım (extends) ile sadece tek bir sınıftan miras alınabilir. Peki bağımsız birçok sınıfa ekstra özellik paketleri (örneğin Uçabilme, Yüzebilme) bağlamak için hangi yapı ve kelime kullanılır?", code: `class Ordek extends Kus [BOŞLUK] Yuzebilir, Ucabilir { }`, options: ["implements", "extends", "with", "mix"], answer: 2, explanation: "Mixins (with anahtar kelimesi ile kullanılır) kalıtım ağacını bozmadan esnek şekilde sınıflara çoklu davranış/yetenek kazandırır." }
+    ];
+
+    // State
+    let currentQuestionIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    let currentCategoryFilter = 'all';
+
+    // Timer Logic
+    let timeLeft = 45 * 60; // 45 minutes
+    const timerDisplay = document.getElementById('timerDisplay');
+    
+    const timerInterval = setInterval(() => {
+      timeLeft--;
+      const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const s = (timeLeft % 60).toString().padStart(2, '0');
+      timerDisplay.textContent = `${m}:${s}`;
+      
+      if (timeLeft <= 300) {
+        timerDisplay.classList.add('timer-blink');
+      }
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        openResultModal();
+      }
+    }, 1000);
+
+    // DOM References
+    const matrixGrid = document.getElementById('matrixGrid');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const explanationBox = document.getElementById('explanationBox');
+    
+    // Init Matrix
+    function initMatrix() {
+      matrixGrid.innerHTML = '';
+      quizData.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `matrix-btn-${idx}`;
+        btn.textContent = idx + 1;
+        btn.className = `w-full aspect-square rounded-xl text-xs font-bold transition-all border flex items-center justify-center ${getMatrixStyles(idx)}`;
+        btn.addEventListener('click', () => goToQuestion(idx));
+        matrixGrid.appendChild(btn);
+      });
+    }
+
+    function getMatrixStyles(idx) {
+      const isCurrent = idx === currentQuestionIndex;
+      const ans = userAnswers[idx];
+      let base = isCurrent ? 'ring-2 ring-indigo-600 ring-offset-2 border-indigo-600' : 'border-slate-200';
+      if (ans === null) return `${base} bg-slate-100 text-slate-700 hover:bg-slate-200`;
+      return ans === quizData[idx].answer ? `${base} bg-emerald-500 text-white` : `${base} bg-rose-500 text-white`;
+    }
+
+    function updateMatrix() {
+      quizData.forEach((q, idx) => {
+        const btn = document.getElementById(`matrix-btn-${idx}`);
+        if (btn) {
+          btn.className = `w-full aspect-square rounded-xl text-xs font-bold transition-all border flex items-center justify-center ${getMatrixStyles(idx)}`;
+          if (currentCategoryFilter !== 'all' && q.category !== currentCategoryFilter.split(' ')[0]) {
+            btn.classList.add('opacity-30');
+          } else {
+            btn.classList.remove('opacity-30');
+          }
+        }
+      });
+    }
+
+    function renderQuestion() {
+      const q = quizData[currentQuestionIndex];
+      const hasAns = userAnswers[currentQuestionIndex] !== null;
+      const selAns = userAnswers[currentQuestionIndex];
+
+      document.getElementById('questionIndexBadge').textContent = `#${q.id}`;
+      document.getElementById('badgeCategory').textContent = q.category;
+      document.getElementById('questionTopicBadge').textContent = q.topic;
+      document.getElementById('questionPrompt').textContent = q.prompt;
+
+      // Colorize Badge
+      const bColor = q.category==='HTML5'?'text-orange-700 bg-orange-50':q.category==='CSS3'?'text-sky-700 bg-sky-50':q.category==='JavaScript'?'text-amber-700 bg-amber-50':'text-teal-700 bg-teal-50';
+      document.getElementById('badgeCategory').className = `px-3 py-1 rounded-lg text-xs font-bold tracking-wide uppercase border ${bColor} border-current`;
+
+      if (q.code) {
+        document.getElementById('codeSnippetBox').classList.remove('hidden');
+        document.getElementById('codeSnippetText').textContent = q.code;
+      } else {
+        document.getElementById('codeSnippetBox').classList.add('hidden');
+      }
+
+      optionsContainer.innerHTML = '';
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement('button');
+        btn.disabled = hasAns;
+        btn.className = `w-full p-4 rounded-2xl border text-left transition-all flex items-center justify-between ${
+          !hasAns ? 'bg-white hover:bg-slate-50 border-slate-200 cursor-pointer' :
+          optIdx === q.answer ? 'bg-emerald-50 border-emerald-400 cursor-default' :
+          optIdx === selAns ? 'bg-rose-50 border-rose-400 cursor-default' : 'bg-slate-50/60 opacity-60 cursor-default'
+        }`;
+        btn.innerHTML = `<span class="text-xs sm:text-sm font-medium leading-relaxed">${escapeHtml(optText)}</span>`;
+        btn.addEventListener('click', () => { if(userAnswers[currentQuestionIndex]===null) { userAnswers[currentQuestionIndex]=optIdx; renderQuestion(); }});
+        optionsContainer.appendChild(btn);
+      });
+
+      if (hasAns) {
+        explanationBox.classList.remove('hidden');
+        const isC = selAns === q.answer;
+        explanationBox.className = `mt-6 p-5 rounded-2xl border ${isC ? 'bg-emerald-50/80 border-emerald-200' : 'bg-rose-50/80 border-rose-200'}`;
+        document.getElementById('explanationTitle').textContent = isC ? 'Doğru Cevap' : 'Yanlış Cevap';
+        document.getElementById('explanationTitle').className = `font-bold text-base mb-1 ${isC ? 'text-emerald-800':'text-rose-800'}`;
+        document.getElementById('explanationIcon').textContent = isC ? '✓' : '✗';
+        document.getElementById('explanationText').textContent = q.explanation;
+      } else {
+        explanationBox.classList.add('hidden');
+      }
+
+      document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+      updateCounters();
+      updateMatrix();
+    }
+
+    function escapeHtml(text) { return text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+    function goToQuestion(idx) {
+      if (idx >= 0 && idx < quizData.length) { currentQuestionIndex = idx; renderQuestion(); }
+    }
+
+    function updateCounters() {
+      let correct = 0, wrong = 0, ansCount = 0;
+      userAnswers.forEach((ans, i) => {
+        if (ans !== null) { ansCount++; ans === quizData[i].answer ? correct++ : wrong++; }
+      });
+      document.getElementById('correctCounter').textContent = correct;
+      document.getElementById('wrongCounter').textContent = wrong;
+      document.getElementById('progressText').textContent = `Soru: ${currentQuestionIndex + 1} / 50`;
+      document.getElementById('progressPercent').textContent = `%${Math.round((ansCount/50)*100)} Tamamlandı`;
+      document.getElementById('progressBar').style.width = `${((currentQuestionIndex + 1)/50)*100}%`;
+    }
+
+    document.getElementById('categoryFilters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      currentCategoryFilter = btn.getAttribute('data-cat');
+      document.querySelectorAll('.cat-btn').forEach(b => b.className = 'cat-btn px-3 py-1 rounded-full bg-white text-slate-600 hover:bg-slate-200 text-xs font-medium');
+      btn.className = 'cat-btn px-3 py-1 rounded-full bg-indigo-600 text-white shadow-xs text-xs font-semibold';
+      if (currentCategoryFilter !== 'all') {
+        const foundIdx = quizData.findIndex(q => q.category === currentCategoryFilter);
+        if (foundIdx !== -1) currentQuestionIndex = foundIdx;
+      }
+      renderQuestion();
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => { if(currentQuestionIndex > 0) goToQuestion(currentQuestionIndex-1); });
+    document.getElementById('nextBtn').addEventListener('click', () => { if(currentQuestionIndex < 49) goToQuestion(currentQuestionIndex+1); else openResultModal(); });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && currentQuestionIndex < 49) goToQuestion(currentQuestionIndex+1);
+      if (e.key === 'ArrowLeft' && currentQuestionIndex > 0) goToQuestion(currentQuestionIndex-1);
+    });
+
+    function openResultModal() {
+      clearInterval(timerInterval);
+      let c=0, w=0, u=0;
+      userAnswers.forEach((ans, i) => {
+        if(ans===null) u++; else if(ans===quizData[i].answer) c++; else w++;
+      });
+      document.getElementById('modalCorrect').textContent = c;
+      document.getElementById('modalWrong').textContent = w;
+      document.getElementById('modalUnanswered').textContent = u;
+      document.getElementById('modalSuccessRate').textContent = `%${c*2} (${c} Soru)`;
+      document.getElementById('modalTimeLeft').textContent = timerDisplay.textContent;
+      
+      const grade = document.getElementById('modalGradeComment');
+      if(c >= 40) grade.textContent = "Harika! İlk 24 kişilik ekibe girmeye çok yakınsın! 🚀";
+      else if(c >= 30) grade.textContent = "İyi bir temel var ancak hoca detayları seviyor, biraz daha pratik şart. 📚";
+      else grade.textContent = "Notları baştan gözden geçirmen gerekiyor. 🛠️";
+      
+      document.getElementById('resultModal').showModal();
+    }
+
+    document.getElementById('finishReviewBtn').addEventListener('click', openResultModal);
+    document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('resultModal').close());
+    document.getElementById('modalRestartBtn').addEventListener('click', () => location.reload());
+
+    window.onload = function() { initMatrix(); renderQuestion(); };
+  </script>
+</body>
+</html>

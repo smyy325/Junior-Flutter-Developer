@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Todo - Grid Layout</title>
+    <style>
+        *, 
+        *::before,
+        *::after{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; margin: 0; }
+        
+        .app-container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 90%; max-width: 1000px; }
+        
+        .input-area { display: flex; gap: 10px; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none; font-size: 16px; }
+        .add-btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        .dashboard-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 15px; 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+        }
+
+        @media (min-width: 640px){
+            .dashboard-grid{
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+        @media (min-width: 1024px){
+            .dashboard-grid{
+                grid-template-columns: repeat(3, 1fr); 
+            }
+        }
+
+        li { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; transition: 0.2s; }
+        li:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.05); transform: translateY(-2px); }
+        
+        .done { text-decoration: line-through; color: #adb5bd; background: #e9ecef; border-color: #dee2e6; }
+        .delete-btn { background: #dc3545; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+        .task-text { cursor: pointer; flex: 1; font-weight: 500; font-size: 15px; padding-right: 10px; word-break: break-word; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="Ne yapacaksın?">
+            <button id="addBtn" class="add-btn">Ekle</button>
+        </div>
+        
+        <ul id="taskList" class="dashboard-grid"></ul>
+    </div>
+
+    <script>
+        class Todo {
+            constructor(text) {
+                this.id = Date.now(); 
+                this.text = text;     
+                this.isDone = false;  
+            }
+        }
+
+        class TodoService {
+            constructor() {
+                this.todos = []; 
+            }
+
+            add(text) {
+                this.todos.push(new Todo(text));
+            }
+
+            toggle(id) {
+                const task = this.todos.find(t => t.id === id); 
+                if (task) task.isDone = !task.isDone; 
+            }
+
+            delete(id) {
+                this.todos = this.todos.filter(t => t.id !== id); 
+            }
+        }
+
+        class UI {
+            constructor() {
+                this.listEl = document.getElementById("taskList");
+                this.inputEl = document.getElementById("taskInput");
+            }
+
+            render(todos, toggleFn, deleteFn) {
+                this.listEl.innerHTML = ""; 
+
+                todos.forEach(task => {
+                    const li = document.createElement("li");
+                    
+                    if (task.isDone === true) {
+                        li.className = "done";
+                    }
+
+                    li.innerHTML = `
+                        <span class="task-text">${task.text}</span>
+                        <button class="delete-btn">Sil</button>
+                    `;
+
+                    li.querySelector(".task-text").addEventListener("click", () => toggleFn(task.id));
+                    li.querySelector(".delete-btn").addEventListener("click", () => deleteFn(task.id));
+
+                    this.listEl.appendChild(li);
+                });
+            }
+
+            clearInput() {
+                this.inputEl.value = "";
+                this.inputEl.focus();
+            }
+        }
+
+        class App {
+            constructor() {
+                this.service = new TodoService();
+                this.ui = new UI();
+                this.baslat();
+            }
+
+            baslat() {
+                document.getElementById("addBtn").addEventListener("click", () => {
+                    const text = this.ui.inputEl.value.trim(); 
+                    
+                    if (text === "") { 
+                        alert("Lütfen bir görev girin!");
+                    } else {
+                        this.service.add(text); 
+                        this.ui.clearInput();   
+                        this.ekraniGuncelle();  
+                    }
+                });
+
+                this.ui.inputEl.addEventListener("keypress", (e) => {
+                    if (e.key === "Enter") document.getElementById("addBtn").click();
+                });
+            }
+
+            ekraniGuncelle() {
+                this.ui.render(this.service.todos, this.gorevTamamla.bind(this), this.gorevSil.bind(this));
+            }
+
+            gorevTamamla(id) {
+                this.service.toggle(id);
+                this.ekraniGuncelle();
+            }
+
+            gorevSil(id) {
+                this.service.delete(id);
+                this.ekraniGuncelle();
+            }
+        }
+        const benimUygulamam = new App();
+    </script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg-lilac: #f9f5ff;
+        --primary-lilac: #b886ee;
+        --dark-lilac: #8b5cf6;
+        --text-dark: #4c1d95;
+        --modal-bg: #f3e8ff;
+        --danger: #fca5a5;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg-lilac);
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+        color: var(--text-dark);
+      }
+
+      .app-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.1);
+        width: 90%;
+        max-width: 1000px;
+      }
+
+      .title {
+        text-align: center;
+        color: var(--dark-lilac);
+        margin-bottom: 25px;
+        font-weight: bold;
+      }
+
+      .input-area {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      input[type="text"] {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #e9d5ff;
+        border-radius: 8px;
+        outline: none;
+        font-size: 16px;
+        color: var(--text-dark);
+        transition: 0.3s;
+      }
+      input[type="text"]:focus {
+        border-color: var(--dark-lilac);
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+      .add-btn {
+        background: var(--dark-lilac);
+        color: white;
+      }
+      .add-btn:hover {
+        background: #7c3aed;
+      }
+
+      .filter-area {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .filter-btn {
+        padding: 8px 15px;
+        border: 2px solid var(--primary-lilac);
+        background: white;
+        color: var(--dark-lilac);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--primary-lilac);
+        color: white;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        list-style: none;
+        padding: 0;
+      }
+      @media (min-width: 640px) {
+        .dashboard-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (min-width: 1024px) {
+        .dashboard-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border: 2px solid #f3e8ff;
+        border-radius: 10px;
+        transition: 0.3s;
+      }
+      li:hover {
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        transform: translateY(-3px);
+        border-color: var(--primary-lilac);
+      }
+
+      .done {
+        background: #faf5ff;
+        border-color: #e9d5ff;
+        opacity: 0.7;
+      }
+      .done .task-text {
+        text-decoration: line-through;
+        color: #a78bfa;
+      }
+
+      .task-text {
+        cursor: pointer;
+        flex: 1;
+        font-weight: 500;
+        font-size: 15px;
+        padding-right: 10px;
+        word-break: break-word;
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 8px;
+      }
+      .btn-small {
+        border: none;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+      }
+      .edit-btn {
+        background: var(--primary-lilac);
+      }
+      .edit-btn:hover {
+        background: var(--dark-lilac);
+      }
+      .delete-btn {
+        background: var(--danger);
+        color: #7f1d1d;
+      }
+      .delete-btn:hover {
+        background: #f87171;
+        color: white;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(76, 29, 149, 0.4);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-box {
+        background: var(--modal-bg);
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 350px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        border: 2px solid var(--primary-lilac);
+        animation: modalFadeIn 0.3s ease;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-box h3 {
+        color: var(--dark-lilac);
+        margin-bottom: 20px;
+      }
+      .modal-box input {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      .save-btn {
+        background: var(--dark-lilac);
+      }
+      .cancel-btn {
+        background: #cbd5e1;
+        color: #334155;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <h2 class="title">Yapılacaklar</h2>
+
+      <div class="input-area">
+        <input
+          type="text"
+          id="taskInput"
+          placeholder="Neler yapman gerekiyor..."
+        />
+        <button id="addBtn" class="btn add-btn">Ekle</button>
+      </div>
+
+      <div class="filter-area" id="filterArea">
+        <button class="filter-btn active" data-filter="all">Tümü</button>
+        <button class="filter-btn" data-filter="active">Devam Edenler</button>
+        <button class="filter-btn" data-filter="completed">Tamamlananlar</button>
+      </div>
+
+      <ul id="taskList" class="dashboard-grid"></ul>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-box">
+        <h3>Görevi Düzenle</h3>
+        <input type="text" id="editInput" placeholder="Görevi değiştir..." />
+        <div class="modal-actions">
+          <button class="btn-small save-btn" id="saveEditBtn">Kaydet</button>
+          <button class="btn-small cancel-btn" id="cancelEditBtn">Vazgeç</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class Todo {
+        constructor(text, isDone = false, id = Date.now()) {
+          this.id = id;
+          this.text = text;
+          this.isDone = isDone;
+        }
+      }
+
+      class StorageService {
+        constructor(storageKey = "lila_todo_data") {
+          this.storageKey = storageKey;
+        }
+        save(todos) {
+          localStorage.setItem(this.storageKey, JSON.stringify(todos));
+        }
+        load() {
+          const data = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+          const loadedTodos = [];
+          
+          for (const t of data) {
+            loadedTodos.push(new Todo(t.text, t.isDone, t.id));
+          }
+          
+          return loadedTodos;
+        }
+      }
+
+      class TodoService {
+        constructor(storageService) {
+          this.storage = storageService;
+          this.todos = this.storage.load();
+          this.currentFilter = "all";
+        }
+
+        _commit() {
+          this.storage.save(this.todos);
+        }
+
+        add(text) {
+          this.todos.push(new Todo(text));
+          this._commit();
+        }
+
+        toggle(id) {
+          const task = this.todos.find((t) => t.id === id);
+          if (task) {
+            task.isDone = !task.isDone;
+            this._commit();
+          }
+        }
+
+        delete(id) {
+          this.todos = this.todos.filter((t) => t.id !== id);
+          this._commit();
+        }
+
+        edit(id, newText) {
+          const task = this.todos.find((t) => t.id === id);
+          if (task && newText) {
+            task.text = newText;
+            this._commit();
+          }
+        }
+
+        setFilter(filterType) {
+          this.currentFilter = filterType;
+        }
+
+        getFilteredTodos() {
+          switch (this.currentFilter) {
+            case "active":
+              return this.todos.filter((t) => !t.isDone);
+            case "completed":
+              return this.todos.filter((t) => t.isDone);
+            case "all":
+            default:
+              return this.todos;
+          }
+        }
+      }
+
+      class UI {
+        constructor() {
+          this.listEl = document.getElementById("taskList");
+          this.inputEl = document.getElementById("taskInput");
+          this.filterArea = document.getElementById("filterArea");
+
+          this.modalOverlay = document.getElementById("modalOverlay");
+          this.editInput = document.getElementById("editInput");
+          this.saveEditBtn = document.getElementById("saveEditBtn");
+          this.cancelEditBtn = document.getElementById("cancelEditBtn");
+
+          this.currentEditId = null;
+          this.currentEditAction = null;
+
+          this.cancelEditBtn.addEventListener("click", () => this.closeModal());
+          this.saveEditBtn.addEventListener("click", () => {
+            if (this.currentEditAction && this.currentEditId !== null) {
+              this.currentEditAction(this.currentEditId, this.editInput.value.trim());
+              this.closeModal();
+            }
+          });
+        }
+
+        openModal(id, text, editAction) {
+          this.currentEditId = id;
+          this.editInput.value = text;
+          this.currentEditAction = editAction;
+          this.modalOverlay.style.display = "flex";
+          this.editInput.focus();
+        }
+
+        closeModal() {
+          this.modalOverlay.style.display = "none";
+          this.currentEditId = null;
+          this.currentEditAction = null;
+        }
+
+        render(todos, actions) {
+          this.listEl.innerHTML = "";
+
+          todos.forEach((task) => {
+            const li = document.createElement("li");
+            if (task.isDone) li.className = "done";
+
+            li.innerHTML = `
+              <span class="task-text">${task.text}</span>
+              <div class="action-btns">
+                  <button class="btn-small edit-btn">Düzenle</button>
+                  <button class="btn-small delete-btn">Sil</button>
+              </div>
+            `;
+
+            li.querySelector(".task-text").addEventListener("click", () => actions.toggle(task.id));
+            li.querySelector(".delete-btn").addEventListener("click", () => actions.delete(task.id));
+            li.querySelector(".edit-btn").addEventListener("click", () => this.openModal(task.id, task.text, actions.edit));
+
+            this.listEl.appendChild(li);
+          });
+        }
+
+        updateFilterButtons(activeFilter) {
+          this.filterArea.querySelectorAll(".filter-btn").forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.filter === activeFilter);
+          });
+        }
+
+        clearInput() {
+          this.inputEl.value = "";
+          this.inputEl.focus();
+        }
+      }
+
+      class App {
+        constructor() {
+          const storage = new StorageService();
+          this.service = new TodoService(storage);
+          this.ui = new UI();
+          this.baslat();
+        }
+
+        baslat() {
+          document.getElementById("addBtn").addEventListener("click", () => this.gorevEkle());
+          
+          this.ui.inputEl.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") this.gorevEkle();
+          });
+
+          this.ui.filterArea.addEventListener("click", (e) => {
+            if (e.target.classList.contains("filter-btn")) {
+              const filterType = e.target.dataset.filter;
+              this.service.setFilter(filterType);
+              this.ui.updateFilterButtons(filterType);
+              this.ekraniGuncelle();
+            }
+          });
+
+          this.ekraniGuncelle();
+        }
+
+        gorevEkle() {
+          const text = this.ui.inputEl.value.trim();
+          if (text) {
+            this.service.add(text);
+            this.ui.clearInput();
+            this.ekraniGuncelle();
+          }
+        }
+
+        ekraniGuncelle() {
+          const listToRender = this.service.getFilteredTodos();
+          this.ui.render(listToRender, {
+            toggle: (id) => {
+              this.service.toggle(id);
+              this.ekraniGuncelle();
+            },
+            delete: (id) => {
+              this.service.delete(id);
+              this.ekraniGuncelle();
+            },
+            edit: (id, newText) => {
+              this.service.edit(id, newText);
+              this.ekraniGuncelle();
+            },
+          });
+        }
+      }
+
+      new App();
+    </script>
+  </body>
+</html>
